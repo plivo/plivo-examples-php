@@ -26,7 +26,7 @@
 ?>
 
 <!--
-Smple Output without Filters
+Sample Output without Filters
 (
     [api_id] => f9adfd4a-a264-11e4-a2d1-22000ac5040c 
     [meta] => Array ( 

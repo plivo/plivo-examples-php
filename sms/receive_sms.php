@@ -21,5 +21,6 @@
 ?>
 
 <!--
+Sample Output
 Message received from 3333333333 : Hello, from Plivo
 -->

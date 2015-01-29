@@ -14,6 +14,13 @@
 
     // Print the response
     print_r ($response['response']);
+
+    // Print the Api ID
+    print "Api ID : {$response['response']['api_id']}";
+
+    // Print the Message UUID
+    print "Message UUID : {$response['response']['message_uuid']}";
+
 ?>
 
 <!--

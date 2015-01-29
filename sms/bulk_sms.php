@@ -25,6 +25,7 @@
 ?>
 
 <!--
+Sample Output
 ( 
     [api_id] => 266dd470-a262-11e4-b153-22000abcaa64 
     [message] => message(s) queued 

@@ -39,6 +39,7 @@
 ?>
 
 <!--
+Sample Output
 Message received from 3333333333 : Hello, from Plivo
 <Response>
     <Message dst="1111111111" src="2222222222" type="sms">Hello, from Plivo</Message>

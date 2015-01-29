@@ -14,9 +14,25 @@
     // Print the response
     print_r ($response['response']);
 
+    $uuid = $response['response']['message_uuid'][0];
+    print $uuid;
+
+    $params = array(
+            'record_id' => $uuid // The Message UUID
+        );
+
+    // Fetch the details
+    $r = new RestAPI($auth_id, $auth_token);
+    $response = $r->get_message($params);
+    $units = $response['response']['units'];
+
+    // Print the response
+    print "Your sms was split into : {$units} units";
+
 ?>
 
 <!--
+Sample Output
 ( 
     [api_id] => dd294730-a262-11e4-b153-22000abcaa64 
     [message] => message(s) queued 

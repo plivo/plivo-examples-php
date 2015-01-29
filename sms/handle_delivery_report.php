@@ -23,6 +23,7 @@
 ?>
 
 <!--
+Sample Output
 From : 2222222222 To : 1111111111 Status : delivered MessageUUID : 53e6526a-8a7a-11e4-a77d-22000ae383ea
 
 Possible values for message status - "queued", "sent", "failed", "delivered", "undelivered" or "rejected"
