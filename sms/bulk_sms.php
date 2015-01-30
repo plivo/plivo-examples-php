@@ -22,6 +22,20 @@
     foreach($uuids as $value){
         print_r ("Message UUID : {$value} <br>");
     }
+
+    // When an invalid number is given as dst parameter, an error will be thrown and the message will not be sent
+    $r = new RestAPI($auth_id, $auth_token);
+
+    $params = array(
+            'src' => '1111111111', // Sender's phone number with country code
+            'dst' => '2222222222<33333', // receiver's phone number with country code
+            'text' => 'Hi, Message from Plivo' // Your SMS text message
+        );
+    // Send message
+    $response = $r->send_message($params);
+
+    // Print the response
+    print_r ($response['response']);    
 ?>
 
 <!--
@@ -33,4 +47,11 @@ Sample Output
 ) 
     Message UUID : 2698aefc-a262-11e4-890b-22000aec819c 
     Message UUID : 26989ff2-a262-11e4-b328-22000afd044b 
+
+Sample Output for invalide destination number
+( 
+    [api_id] => 24239bca-a878-11e4-b932-22000ac50fac 
+    [error] => 33333 is not a valid phone number 
+)
+
 -->
