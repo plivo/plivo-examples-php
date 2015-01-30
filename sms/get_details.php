@@ -14,12 +14,12 @@
 
     // Print the response
     print_r ($response['response']);
-
-    // Print the Api ID
-    print "Api ID : {$response['response']['api_id']}";
-
-    // Print the Message UUID
-    print "Message UUID : {$response['response']['message_uuid']}";
+    
+    // Print the number of SMS units
+    print "Units : {$response['response']['units']}";
+    
+    // Print the status of the message
+    print "Message State : {$response['response']['message_state']}";
 
 ?>
 
@@ -38,4 +38,7 @@ Sample Output
     [total_amount] => 0.02600 
     [total_rate] => 0.00650 
     [units] => 4
+)
+Units : 4
+Message State : delivered 
 -->
