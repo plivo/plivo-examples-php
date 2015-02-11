@@ -21,6 +21,8 @@
 
     })->name('speak')->via('GET', 'POST');
 
+    $app->run();
+
 /*
 Sample Output
 <Response>

@@ -38,6 +38,8 @@
 
     })->name('custom_tone')->via('GET', 'POST');
 
+    $app->run();
+    
 /*
 Sample Output
 <Response>

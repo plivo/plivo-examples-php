@@ -29,6 +29,8 @@
     )
     */
     
+    $uuids = $response['response']['calls'];
+    
     // Looping through the call uuids
     foreach($uuids as $value){
         print_r ("Calls : {$value} <br>");

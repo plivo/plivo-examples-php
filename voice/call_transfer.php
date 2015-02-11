@@ -49,6 +49,7 @@
 
     })->name('connect')->via('GET', 'POST');
 
+    $app->run();
 /*
 Sample Output
 <Response>

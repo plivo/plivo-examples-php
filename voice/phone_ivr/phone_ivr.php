@@ -39,12 +39,12 @@
                 if ($digit == '1'){
                     $getdigits_action_url = "https://glacial-harbor-8656.herokuapp.com/testing.php/response/tree";
                     $params = array(
-                    'action' => $getdigits_action_url,
-                    'method' => 'GET',
-                    'timeout' => '7',
-                    'numDigits' =>  '1',
-                    'retries' => '1'
-                );
+                        'action' => $getdigits_action_url,
+                        'method' => 'GET',
+                        'timeout' => '7',
+                        'numDigits' =>  '1',
+                        'retries' => '1'
+                    );
 
                 $getDigits = $r->addGetDigits($params);
                 $getDigits->addSpeak($IVR_MESSAGE2);
@@ -110,6 +110,8 @@
         $app->response = $res;
 
     })->name('tree')->via('GET','POST');
+
+    $app->run();
 
 /*
 Sample output

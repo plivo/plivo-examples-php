@@ -2,7 +2,7 @@
     require_once "./plivo.php";
     require 'vendor/autoload.php';
 
-    $app->map('/speak', function() use ($app) {
+    $app->map('/call_hunting', function() use ($app) {
         $res = new \Slim\Http\Response();
 
         // Simultaneous dialing is useful when there are SIP users and numbers that you want to dial. 
