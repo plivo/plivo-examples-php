@@ -11,10 +11,10 @@
         $to_number = $_REQUEST["To"];
 
         // The SMS text message which was received
-        $ststus = $_REQUEST["Status"];
+        $status = $_REQUEST["Status"];
 
         // Message UUID
-        $uuid = $REQUEST["MessageUUID"];
+        $uuid = $_REQUEST["MessageUUID"];
 
         // Output the text which was received, you could
         // also store the text in a database.
