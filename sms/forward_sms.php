@@ -20,7 +20,7 @@
         echo("Message received from $from_number : $text");
 
         // The phone number to which the SMS has to be forwarded
-        to_forward = '3333333333'   
+        $to_forward = '3333333333'   
 
         $params = array(
                 'src' => $to_number, 
