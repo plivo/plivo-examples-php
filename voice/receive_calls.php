@@ -2,6 +2,8 @@
     require_once "./plivo.php";
     require 'vendor/autoload.php';
 
+    $app = new \Slim\Slim();
+
     $app->map('/speak', function() use ($app) {
         
         $res = new \Slim\Http\Response();

@@ -1,3 +1,4 @@
+<!-- make_call.php-->
 <?php
     require_once "./plivo.php";
     $auth_id = "Your AUTH_ID";
@@ -20,7 +21,8 @@
 
     print_r ($response);
 
-/* Sample Output
+?>
+<!--Sample Output
 ( 
     [status] => 201 
     [response] => Array ( 
@@ -28,7 +30,15 @@
         [message] => call fired 
         [request_uuid] => 5b2db3d3-f478-4b63-992c-e47c527572e8 
 )
-*/
+-->
+
+<!-- Machine detection URL example-->
+
+<?php
+    require_once "./plivo.php";
+    require 'vendor/autoload.php';
+
+    $app = new \Slim\Slim();
 
     $app->map('/machine_detect', function() use ($app) {
 
