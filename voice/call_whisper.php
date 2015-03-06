@@ -17,12 +17,12 @@
 
         // Add Dial tag
         $d = $r->addDial($params);
-        $number1 = "919663489033";
+        $number1 = "11111111111";
         $d->addNumber($number1);
-        $number2 = "919663489033";
+        $number2 = "2222222222";
         $d->addNumber($number1);
-        $number3 = "919663489033";
-        $d->addNumber($number3);
+        $number3 = "abcd1234@phone.plivo.com<";
+        $d->addUser($number3);
 
         $res->headers->set('Content-Type', 'text/xml');
         $res->setBody($r->toXML());

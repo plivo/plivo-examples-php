@@ -42,7 +42,7 @@
 
         // Add Dial tag
         $d = $r->addDial($attributes);
-        $number = "919663489033";
+        $number = "11111111111";
         $d->addNumber($number);
 
         $res->headers->set('Content-Type', 'text/xml');
@@ -64,7 +64,7 @@ Sample Output
 <Response>
     <Speak>Connecting your call..</Speak>
     <Dial action="https://morning-ocean-4669.herokuapp.com/dial_status/" method="GET" redirect="true">
-        <Number>919663489033</Number>
+        <Number>11111111111</Number>
     </Dial>
 </Response>
 */
