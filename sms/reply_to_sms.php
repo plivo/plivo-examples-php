@@ -5,7 +5,7 @@
     require 'vendor/autoload.php';
     $app = new \Slim\Slim();
     
-    $app->map('/receive_sms', function () use ($app) {
+    $app->map('/reply_to_sms', function () use ($app) {
         // Sender's phone numer
         $from_number = $_REQUEST["From"];
 
@@ -32,7 +32,7 @@
         $r->addMessage($body, $params);
 
         echo($r->toXML());
-    }
+    })->name('reply_to_sms')->via('GET','POST');
 
     $app->run();
 ?>

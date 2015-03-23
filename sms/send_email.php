@@ -20,7 +20,7 @@
         // also store the text in a database.
         echo("Message received from $from_number : $text");
         to_email($text);
-    }
+    })->name('receive_sms')->via('GET','POST');
 
     function to_email($text){
 

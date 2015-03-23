@@ -17,7 +17,7 @@
         // Output the text which was received, you could
         // also store the text in a database.
         echo("Message received from $from_number : $text");
-    }
+    })->name('receive_sms')->via('GET','POST');
 
     $app->run();
 ?>
