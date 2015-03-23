@@ -20,6 +20,8 @@
         // also store the text in a database.
         echo("From : $from_number, To : $to_number, Status : $status, Message UUID : $uuid");
     }
+
+    $app->run();
 ?>
 
 <!--

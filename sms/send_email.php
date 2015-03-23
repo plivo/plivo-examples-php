@@ -52,6 +52,9 @@
             echo('<p>Message successfully sent!</p>');
         }
     }
+
+    $app->run();
+
 ?>
 
 <!--
