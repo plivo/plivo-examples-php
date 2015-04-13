@@ -16,7 +16,7 @@
                 'action' => "https://glacial-harbor-8656.herokuapp.com/testing.php/response/conf_action/", # URL to which the API can send back parameters
                 'method' => "GET", # method to invoke the action Url
                 'record' => "true", # Option to record the call 
-                'callbackUrl' => "hhttps://glacial-harbor-8656.herokuapp.com/testing.php/response/conf_callback/", # If specified, information is sent back to this URL
+                'callbackUrl' => "https://glacial-harbor-8656.herokuapp.com/testing.php/response/conf_callback/", # If specified, information is sent back to this URL
                 'callbackMethod' => "GET" # Method used to notify callbackUrl
                 # For moderated conference
                 'startConferenceOnEnter' => "true", # When a member joins the conference with this attribute set to true, the conference is started.
