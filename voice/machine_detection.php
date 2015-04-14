@@ -1,6 +1,7 @@
 <!-- make_call.php-->
 <?php
     require_once "./plivo.php";
+
     $auth_id = "Your AUTH_ID";
     $auth_token = "Your AUTH_TOKEN";
 
@@ -9,11 +10,11 @@
     $params = array(
         'to' => '14155069431', # The phone numer to which the all has to be placed
         'from' => '18583650866', # The phone number to be used as the caller id
-        'answer_url' => "https://glacial-harbor-8656.herokuapp.com/testing.php/detect", # The URL invoked by Plivo when the outbound call is answered
+        'answer_url' => "https://example.com/detect.php", # The URL invoked by Plivo when the outbound call is answered
         'answer_method' => "GET", # The method used to call the answer_url
         'machine_detection' => "true", # Used to detect if the call has been answered by a machine. The valid values are true and hangup.
         'machine_detection_time' => "10000", # Time allotted to analyze if the call has been answered by a machine. The default value is 5000 ms.
-        'machine_detection_url' => "https://glacial-harbor-8656.herokuapp.com/testing.php/machine_detect", # A URL where machine detection parameters will be sent by Plivo.
+        'machine_detection_url' => "https://example.com/testing.php/machine_detect.php", # A URL where machine detection parameters will be sent by Plivo.
         'machine_detection_method' => "GET" # Method used to invoke machine_detection_url
     );
     
@@ -32,52 +33,44 @@
 )
 -->
 
-<!-- Machine detection URL example-->
+<!-- machine_detect.php-->
+
+<?php
+
+    $from_number = $_REQUEST['From'];
+    $to_number = $_REQUEST['To'];
+    $machine = $_REQUEST['Machine'];
+    $call_uuid = $_REQUEST['CallUUID'];
+    $event = $_REQUEST['Event'];
+    $call_status = $_REQUEST['CallStatus'];
+    error_log("From = $from_number , To = $to_number , Machine = $machine , Call UUID = $call_uuid , Event = $event , Call Status = $call_status");
+    echo "From = $from_number , To = $to_number , Machine = $machine , Call UUID = $call_uuid , Event = $event , Call Status = $call_status";
+
+?>
+
+
+<!-- detect.php-->
 
 <?php
     require_once "./plivo.php";
-    require 'vendor/autoload.php';
 
-    $app = new \Slim\Slim();
+    $r = new Response();
 
-    $app->map('/machine_detect', function() use ($app) {
+    // Add Wait tag
+    $params = array(
+        'length' => '1000',
+        'silence' => 'true',
+        'minSilence' => '3000'
+    );
 
-        $from_number = $_REQUEST['From'];
-        $to_number = $_REQUEST['To'];
-        $machine = $_REQUEST['Machine'];
-        $call_uuid = $_REQUEST['CallUUID'];
-        $event = $_REQUEST['Event'];
-        $call_status = $_REQUEST['CallStatus'];
-        error_log("From = $from_number , To = $to_number , Machine = $machine , Call UUID = $call_uuid , Event = $event , Call Status = $call_status");
-        echo "From = $from_number , To = $to_number , Machine = $machine , Call UUID = $call_uuid , Event = $event , Call Status = $call_status";
+    $r->addWait($params);
 
-    })->name('machine_detect')->via('GET', 'POST');
+    // Add Speak tag
+    $body = "Hello voicemeail";
+    $r->addSpeak($body);
 
-    $app->map('/detect', function() use ($app) {
-
-        $res = new \Slim\Http\Response();
-
-        $r = new Response();
-
-        // Add Wait tag
-        $params = array(
-            'length' => '1000',
-            'silence' => 'true',
-            'minSilence' => '3000'
-        );
-        $r->addWait($params);
-
-        / Add Speak tag
-        $body = "Hello voicemeail";
-        $r->addSpeak($body);
-
-        $res->headers->set('Content-Type', 'text/xml');
-        $res->setBody($r->toXML());
-        $app->response = $res;
-
-    })->name('detect')->via('GET', 'POST');
-
-    $app->run();
+    Header('Content-type: text/xml');
+    echo($r->toXML());
 
 /*
 Sample Output

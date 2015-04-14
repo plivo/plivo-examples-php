@@ -1,35 +1,25 @@
 <?php
     require_once "./plivo.php";
-    require 'vendor/autoload.php';
 
-    $app = new \Slim\Slim();
+    $r = new Response();
 
-    $app->map('/basic_wait', function() use ($app) {
+    // Add Speak tag
+    $body = "I will wait for 10 seconds";
+    $r->addSpeak($body);
 
-        $res = new \Slim\Http\Response();
+    // Add Wait tag
+    $params = array(
+        'length' => '10' # Time to wait in seconds
+      );  
 
-        $r = new Response();
+    $r->addWait($params);
 
-        // Add Speak tag
-        $body = "I will wait for 10 seconds";
-        $r->addSpeak($body);
+    // Add Speak tag
+    $body1 = "I just waited 10 seconds";
+    $r->addSpeak($body1);
 
-        // Add Wait tag
-        $params = array(
-            'length' => '10' # Time to wait in seconds
-          );  
-
-        $r->addWait($params);
-
-        // Add Speak tag
-        $body1 = "I just waited 10 seconds";
-        $r->addSpeak($body1);
-
-        $res->headers->set('Content-Type', 'text/xml');
-        $res->setBody($r->toXML());
-        $app->response = $res;
-
-    })->name('basic_wait')->via('GET', 'POST');
+    Header('Content-type: text/xml');
+    echo($r->toXML());
 
 /*
 Sample Wait XML
@@ -40,28 +30,28 @@ Sample Wait XML
 </Response>
 */
 
-    $app->map('/delayed_wait', function() use ($app) {
+?>
 
-        $res = new \Slim\Http\Response();
 
-        $r = new Response();
+<?php
 
-        // Add Wait tag
-        $params = array(
-            'length' => '10' # Time to wait in seconds
-          );  
+    require_once "./plivo.php";
+    
+    $r = new Response();
 
-        $r->addWait($params);
+    // Add Wait tag
+    $params = array(
+        'length' => '10' # Time to wait in seconds
+      );  
 
-        // Add Speak tag
-        $body = "Hello";
-        $r->addSpeak($body);
+    $r->addWait($params);
 
-        $res->headers->set('Content-Type', 'text/xml');
-        $res->setBody($r->toXML());
-        $app->response = $res;
+    // Add Speak tag
+    $body = "Hello";
+    $r->addSpeak($body);
 
-    })->name('delayed_wait')->via('GET', 'POST');
+    Header('Content-type: text/xml');
+    echo($r->toXML());
 
 /* 
 Sample Wait XML
@@ -71,31 +61,28 @@ Sample Wait XML
 </Response>
 */
 
-    $app->map('/beep_det', function() use ($app) {
+?>
 
-        $res = new \Slim\Http\Response();
+<?php
 
-        $r = new Response();
+    require_once "./plivo.php";
+    
+    $r = new Response();
 
-        // Add Wait tag
-        $params = array(
-            'length' => '10', # Time to wait in seconds
-            'beep' =>'true' # Used to detect a voice mail machine.
-          );  
+    // Add Wait tag
+    $params = array(
+        'length' => '10', # Time to wait in seconds
+        'beep' =>'true' # Used to detect a voice mail machine.
+      );  
 
-        $r->addWait($params);
+    $r->addWait($params);
 
-        // Add Speak tag
-        $body = "Hello";
-        $r->addSpeak($body);
+    // Add Speak tag
+    $body = "Hello";
+    $r->addSpeak($body);
 
-        $res->headers->set('Content-Type', 'text/xml');
-        $res->setBody($r->toXML());
-        $app->response = $res;
-
-    })->name('beep_det')->via('GET', 'POST');
-
-    $app->run();
+    Header('Content-type: text/xml');
+    echo($r->toXML());
 /*
 Sample Wait XML
 <Response>

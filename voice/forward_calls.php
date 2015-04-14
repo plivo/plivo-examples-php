@@ -1,32 +1,21 @@
 <?php
     require_once "./plivo.php";
-    require 'vendor/autoload.php';
 
-    $app = new \Slim\Slim();
+    // Feth the from_number from the URL
+    $from_numbr = $_REQUEST['From'];
+    $r = new Response(); 
 
-    $app->map('/speak', function() use ($app) {
-        $res = new \Slim\Http\Response();
+    // Add Dial tag
+    $params = array(
+        'callerId' => $from_numbr # Caller ID
+    );
 
-        // Feth the from_number from the URL
-        $from_numbr = $_REQUEST['From'];
-        $r = new Response(); 
+    $d = $r->addDial($params);
+    $number = "2222222222";
+    $d->addNumber($number);
 
-        // Add Dial tag
-        $params = array(
-            'callerId' => $from_numbr # Caller ID
-        );
-
-        $d = $r->addDial($params);
-        $number = "2222222222";
-        $d->addNumber($number);
-
-        $res->headers->set('Content-Type', 'text/xml');
-        $res->setBody($r->toXML());
-        $app->response = $res;
-
-    })->name('speak')->via('GET', 'POST');
-
-    $app->run();
+    Header('Content-type: text/xml');
+    echo($r->toXML());
 
 /*
 Sample Output

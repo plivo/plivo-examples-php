@@ -1,27 +1,21 @@
 <?php
-    use GuzzleHttp\Client;
-    require 'vendor/autoload.php';
-    $app = new \Slim\Slim();
     
-    $app->map('/delivery_report', function () use ($app) {
-        // Sender's phone numer
-        $from_number = $_REQUEST["From"];
+    // Sender's phone numer
+    $from_number = $_REQUEST["From"];
 
-        // Receiver's phone number - Plivo number
-        $to_number = $_REQUEST["To"];
+    // Receiver's phone number - Plivo number
+    $to_number = $_REQUEST["To"];
 
-        // The SMS text message which was received
-        $status = $_REQUEST["Status"];
+    // The SMS text message which was received
+    $status = $_REQUEST["Status"];
 
-        // Message UUID
-        $uuid = $_REQUEST["MessageUUID"];
+    // Message UUID
+    $uuid = $_REQUEST["MessageUUID"];
 
-        // Output the text which was received, you could
-        // also store the text in a database.
-        echo("From : $from_number, To : $to_number, Status : $status, Message UUID : $uuid");
-    })->name('delivery_report')->via('GET','POST');
+    // Output the text which was received, you could
+    // also store the text in a database.
+    echo("From : $from_number, To : $to_number, Status : $status, Message UUID : $uuid");
 
-    $app->run();
 ?>
 
 <!--

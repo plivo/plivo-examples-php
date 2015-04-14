@@ -1,57 +1,48 @@
 <?php
     require_once "./plivo.php";
-    require 'vendor/autoload.php';
-
-    $app = new \Slim\Slim();
 
     # Generate a Record XML and ask the caller to leave a message
+    $r = new Response();
 
-    $app->map('/voicemail', function() use ($app) {
+    # The recorded file will be sent to the 'action' URL
+    $record_params = array(
+        'action'=> 'https://example.com/record_action.php', # Submit the result of the record to this URL
+        'method' => 'GET', # HTTP method to submit the action URL
+        'maxLength'=> '30', # Maximum number of seconds to record 
+        'transcriptionType' => 'auto', # The type of transcription required
+        'transcriptionUrl' => 'https://example.com/transcription.php', # The URL where the transcription while be sent from Plivo
+        'transcriptionMethod' => 'GET' # The method used to invoke transcriptionUrl 
+    );
 
-        $res = new \Slim\Http\Response();
-        $r = new Response();
+    $r->addSpeak("Leave your message after the tone");
+    $r->addRecord($record_params);
 
-        # The recorded file will be sent to the 'action' URL
-        $record_params = array(
-            'action'=> 'https://glacial-harbor-8656.herokuapp.com/testing.php/record_action', # Submit the result of the record to this URL
-            'method' => 'GET', # HTTP method to submit the action URL
-            'maxLength'=> '30', # Maximum number of seconds to record 
-            'transcriptionType' => 'auto', # The type of transcription required
-            'transcriptionUrl' => 'https://glacial-harbor-8656.herokuapp.com/testing.php/transcription', # The URL where the transcription while be sent from Plivo
-            'transcriptionMethod' => 'GET' # The method used to invoke transcriptionUrl 
-        );
+    Header('Content-type: text/xml');
+    echo($r->toXML());
 
-        $r->addSpeak("Leave your message after the tone");
-        $r->addRecord($record_params);
+?>
 
-        $res->headers->set('Content-Type', 'text/xml');
-        $res->setBody($r->toXML());
-        error_log($r->toXML());
-        $app->response = $res; 
+<!--record_action.php-->
 
-    })->name('voicemail')->via('GET','POST');
-
+<?php
     # Action URL Example
-    $app->map('/record_action', function() use ($app) {
 
-        $record_url = $_REQUEST['RecordUrl'];
-        $record_duration = $_REQUEST['RecordingDuration'];
-        $record_id = $_REQUEST['RecordingID'];
-        error_log("Record URL : $record_url");
-        error_log("Recording Duration : $record_duration");
-        error_log("Recording ID : $record_id");
+    $record_url = $_REQUEST['RecordUrl'];
+    $record_duration = $_REQUEST['RecordingDuration'];
+    $record_id = $_REQUEST['RecordingID'];
+    echo("Record URL : $record_url");
+    echo("Recording Duration : $record_duration");
+    echo("Recording ID : $record_id");
 
-    })->name('record_action')->via('GET','POST');
+?>
 
+<!--transcription.php-->
+
+<?php
     # Transcription URL Example
-    $app->map('/transcription', function() use ($app) {
+    $transcription = $_REQUEST['transcription'];
+    echo("Transcription is : $transcription ");
 
-        $transcription = $_REQUEST['transcription'];
-        error_log("Transcription is : $transcriptions ");
-
-    })->name('transcription')->via('GET','POST');
-
-    $app->run();
 
 /*
 Sample Output

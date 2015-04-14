@@ -1,43 +1,37 @@
 <?php
     require_once 'plivo.php';
-
-    use GuzzleHttp\Client;
-    require 'vendor/autoload.php';
-    $app = new \Slim\Slim();
     
-    $app->map('/forward_sms', function () use ($app) {
-        // Sender's phone numer
-        $from_number = $_REQUEST["From"];
+    // Sender's phone numer
+    $from_number = $_REQUEST["From"];
 
-        // Receiver's phone number - Plivo number
-        $to_number = $_REQUEST["To"];
+    // Receiver's phone number - Plivo number
+    $to_number = $_REQUEST["To"];
 
-        // The SMS text message which was received
-        $text = $_REQUEST["Text"];
+    // The SMS text message which was received
+    $text = $_REQUEST["Text"];
 
-        // Output the text which was received, you could
-        // also store the text in a database.
-        echo("Message received from $from_number : $text");
+    // Output the text which was received, you could
+    // also store the text in a database.
+    echo("Message received from $from_number : $text");
 
-        // The phone number to which the SMS has to be forwarded
-        $to_forward = '3333333333'   
+    // The phone number to which the SMS has to be forwarded
+    $to_forward = '3333333333'   
 
-        $params = array(
-                'src' => $to_number, 
-                'dst' => $to_forward,
-            );
+    $params = array(
+            'src' => $to_number, 
+            'dst' => $to_forward,
+        );
 
-        $body = $text;
+    $body = $text;
 
-        // Generate a Message XML with the details of
-        // the reply to be sent.
-        $r = new Response();
-        $r->addMessage($body, $params);
+    // Generate a Message XML with the details of
+    // the reply to be sent.
+    $r = new Response();
+    $r->addMessage($body, $params);
 
-        echo($r->toXML());
-    })->name('forward_sms')->via('GET','POST');
-
-    $app->run();
+    Header('Content-type: text/xml');
+    echo($r->toXML());
+    
 ?>
 
 <!--

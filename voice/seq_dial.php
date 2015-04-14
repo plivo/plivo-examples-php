@@ -1,36 +1,24 @@
 <?php
     require_once "./plivo.php";
-    require 'vendor/autoload.php';
 
-    $app = new \Slim\Slim();
+    $r = new Response();
 
-    $app->map('/speak', function() use ($app) {
+    $params = array(
+    'timeout' => "20", # The duration (in seconds) for which the called party has to be given a ring.
+    'action'=> "https://example.com/dial_status.php" # Redirect to this URL after leaving Dial.
+    );
 
-        $res = new \Slim\Http\Response();
+    // Add Dial tag
+    $d = $r->addDial($params);
+    $number1 = "1111111111";
+    $d->addNumber($number1);
 
-        $r = new Response();
+    $d = $r->addDial();
+    $number2 = "1111111111";
+    $d->addNumber($number2);
 
-        $params = array(
-        'timeout' => "20", # The duration (in seconds) for which the called party has to be given a ring.
-        'action'=> "https://glacial-harbor-8656.herokuapp.com/testing.php/dial_status/" # Redirect to this URL after leaving Dial.
-        );
-
-        // Add Dial tag
-        $d = $r->addDial($params);
-        $number1 = "1111111111";
-        $d->addNumber($number1);
-
-        $d = $r->addDial();
-        $number2 = "1111111111";
-        $d->addNumber($number2);
-
-        $res->headers->set('Content-Type', 'text/xml');
-        $res->setBody($r->toXML());
-        $app->response = $res;
-
-        })->name('seq_dial')->via('GET', 'POST');
-
-        $app->run();
+    Header('Content-type: text/xml');
+    echo($r->toXML());
 
 /*
 Sample Output

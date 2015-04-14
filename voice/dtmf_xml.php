@@ -1,29 +1,18 @@
 <?php
     require_once "./plivo.php";
-    require 'vendor/autoload.php';
 
-    $app = new \Slim\Slim();
+    $r = new Response(); 
 
-    $app->map('/speak', function() use ($app) {
-        $res = new \Slim\Http\Response();
+    // Add Speak tag
+    $body = "Sending Digits";
+    $r->addSpeak($body);
 
-        $r = new Response(); 
+    // Add DTMF tag
+    $dtmf = "12345";
+    $r->addDTMF($dtmf);
 
-        // Add Speak tag
-        $body = "Sending Digits";
-        $r->addSpeak($body);
-
-        // Add DTMF tag
-        $dtmf = "12345";
-        $r->addDTMF($dtmf);
-
-        $res->headers->set('Content-Type', 'text/xml');
-        $res->setBody($r->toXML());
-        $app->response = $res;
-
-    })->name('speak')->via('GET', 'POST');
-
-    $app->run();
+    Header('Content-type: text/xml');
+    echo($r->toXML());
 
 /*
 Sample Output

@@ -1,72 +1,63 @@
 <?php
     require_once "./plivo.php";
-    require 'vendor/autoload.php';
+ 
+    $r = new Response();
 
-    $app = new \Slim\Slim();
+    $getdigits_action_url = "https://example.com/recording_action.php";
+    $params = array(
+        'action' => $getdigits_action_url, # The URL to which the digits are sent.
+        'method' => 'GET', # Submit to action URL using GET or POST.
+        'timeout' => '7', # Time in seconds to wait to receive the first digit.
+        'numDigits' =>  '1', # Maximum number of digits to be processed in the current operation. 
+        'retries' => '1', # Indicates the number of retries the user is allowed to input the digits
+        'redirect' => 'false' # Redirect to action URL if true. If false,only request the URL and continue to next element.
+    );
 
-    $app->map('/record_api', function() use ($app) {
+    $getDigits = $r->addGetDigits($params);
 
-        $res = new \Slim\Http\Response();
-        $r = new Response();
+    $getDigits->addSpeak("Press 1 to record this call");
 
-        $getdigits_action_url = "https://glacial-harbor-8656.herokuapp.com/testing.php/recording_action";
+    $waitparam = array(
+        'length' => '10'
+    );
+ 
+    $r->addWait($waitparam);
+
+    Header('Content-type: text/xml');
+    echo($r->toXML());
+?>
+
+<!--recording_action.php-->
+
+<?php
+    require_once "./plivo.php";
+
+    $digit = $_REQUEST['Digits'];
+    $uuid = $_REQUEST['CallUUID'];
+    print("Digit : $digit");
+    print("Call UUID : $uuid");
+
+    $auth_id = "Your AUTH_ID";
+    $auth_token = "Your AUTH_TOKEN";
+
+    $p = new RestAPI($auth_id, $auth_token);  
+
+    if($digit == "1")
+    {
         $params = array(
-            'action' => $getdigits_action_url, # The URL to which the digits are sent.
-            'method' => 'GET', # Submit to action URL using GET or POST.
-            'timeout' => '7', # Time in seconds to wait to receive the first digit.
-            'numDigits' =>  '1', # Maximum number of digits to be processed in the current operation. 
-            'retries' => '1', # Indicates the number of retries the user is allowed to input the digits
-            'redirect' => 'false' # Redirect to action URL if true. If false,only request the URL and continue to next element.
+            'call_uuid' => $uuid # ID of the call
         );
 
-        $getDigits = $r->addGetDigits($params);
-
-        $getDigits->addSpeak("Press 1 to record this call");
-
-        $waitparam = array(
-            'length' => '10'
-        );
-        $r->addWait($waitparam);
-
-        $res->headers->set('Content-Type', 'text/xml');
-        $res->setBody($r->toXML());
-        $app->response = $res;
-
-    })->name('record_api')->via('GET','POST');  
-
-
-    $app->map('/recording_action', function() use ($app) {
-
-        $digit = $_REQUEST['Digits'];
-        $uuid = $_REQUEST['CallUUID'];
-        print("Digit : $digit");
-        print("Call UUID : $uuid");
-
-        $auth_id = "Your AUTH_ID";
-        $auth_token = "Your AUTH_TOKEN";
-
-        $p = new RestAPI($auth_id, $auth_token);  
-
-        if($digit == "1")
-        {
-            $params = array(
-                'call_uuid' => $uuid # ID of the call
-            );
-
-            $response = $p->record($params);
-            print("URL : {$response['response']['url']}");
-            print("Recording ID : {$response['response']['recording_id']}");
-            print("API ID : {$response['response']['api_id']}");
-            print("Message : {$response['response']['message']}");
-        }
-        else
-        {
-            print("invalid");
-        }
-
-    })->name('recording_action')->via('GET','POST');
-
-    $app->run();
+        $response = $p->record($params);
+        print("URL : {$response['response']['url']}");
+        print("Recording ID : {$response['response']['recording_id']}");
+        print("API ID : {$response['response']['api_id']}");
+        print("Message : {$response['response']['message']}");
+    }
+    else
+    {
+        print("invalid");
+    }
 
 /*
 Sample Output

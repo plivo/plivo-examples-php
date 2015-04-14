@@ -1,31 +1,20 @@
 <?php
     require_once "./plivo.php";
-    require 'vendor/autoload.php';
 
-    $app = new \Slim\Slim();
+    $r = new Response();
 
-    $app->map('/hangup', function() use ($app) {
-        $res = new \Slim\Http\Response();
+    // Generate a Hangup XML
+    $params = array(
+            'reason' => 'busy', # Specify the reason for hangup
+            'schedule' => '60' # Schedule the hangup
+        );
 
-        $r = new Response();
+    $body = "This call will be hung up in 1 minute";
+    $r->addSpeak($body);
+    $r->addHangup($params);
 
-        // Generate a Hangup XML
-        $params = array(
-                'reason' => 'busy', # Specify the reason for hangup
-                'schedule' => '60' # Schedule the hangup
-            );
-
-        $body = "This call will be hung up in 1 minute";
-        $r->addSpeak($body);
-        $r->addHangup($params);
-
-        $res->headers->set('Content-Type', 'text/xml');
-        $res->setBody($r->toXML());
-        $app->response = $res;
-
-    })->name('speak')->via('GET', 'POST');
-
-    $app->run();
+    Header('Content-type: text/xml');
+    echo($r->toXML());
 
 /*
 Sample Output

@@ -1,35 +1,24 @@
 <?php
     require_once "./plivo.php";
-    require 'vendor/autoload.php';
 
-    $app = new \Slim\Slim();
+    // Simultaneous dialing is useful when there are SIP users and numbers that you want to dial. 
+    // The first call that connects will cancel all other tries.
 
-    $app->map('/call_hunting', function() use ($app) {
-        $res = new \Slim\Http\Response();
+    $r = new Response(); 
 
-        // Simultaneous dialing is useful when there are SIP users and numbers that you want to dial. 
-        // The first call that connects will cancel all other tries.
+    // Add Dial tag
+    $d = $r->addDial();
 
-        $r = new Response(); 
+    // Add Number tag
+    $number1 = "1111111111";
+    $d->addNumber($number1);
+    $number2 = "2222222222";
+    $d->addNumber($number1);
+    $user1 = "sip:abcd1234@phone.plivo.com";
+    $d->addUser($user1);
 
-        // Add Dial tag
-        $d = $r->addDial();
-
-        // Add Number tag
-        $number1 = "1111111111";
-        $d->addNumber($number1);
-        $number2 = "2222222222";
-        $d->addNumber($number1);
-        $user1 = "sip:abcd1234@phone.plivo.com";
-        $d->addUser($user1);
-
-        $res->headers->set('Content-Type', 'text/xml');
-        $res->setBody($r->toXML());
-        $app->response = $res;
-
-    })->name('speak')->via('GET', 'POST');
-
-    $app->run();
+    Header('Content-type: text/xml');
+    echo($r->toXML());
 
 /*
 Sample Output

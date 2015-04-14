@@ -1,57 +1,48 @@
 <?php
     require_once "./plivo.php";
-    require 'vendor/autoload.php';
 
-    $app = new \Slim\Slim();
+    $r = new Response(); 
 
-    $app->map('/call_transfer', function() use ($app) {
-        $res = new \Slim\Http\Response();
+    //Add Speak tag
+    $body = "Please wait while your call is being transferred";
 
-        $r = new Response(); 
+    $r->addSpeak($body);
 
-        //Add Speak tag
-        $body = "Please wait while your call is being transferred";
+    // Add Redirect tag
+    $redirect = "https://example.com/connect.php";
 
-        $r->addSpeak($body);
+    $r->addRedirect($redirect);
 
-        // Add Redirect tag
-        $redirect = "https://glacial-harbor-8656.herokuapp.com/testing.php/connect";
+    Header('Content-type: text/xml');
+    echo($r->toXML());
 
-        $r->addRedirect($redirect);
+?>
 
-        $res->headers->set('Content-Type', 'text/xml');
-        $res->setBody($r->toXML());
-        $app->response = $res;
+<!--connect.php-->
 
-    })->name('call_transfer')->via('GET', 'POST');
+<?php   
+    require_once "./plivo.php";
 
-    $app->map('/connect', function() use ($app) {
-        $res = new \Slim\Http\Response();
+    $r = new Response(); 
 
-        $r = new Response(); 
+    // Add Speak tag
+    $body = "Connecting your call..";
+    $attributes = array(
+      'action' => "https://example.com/dial_status.php", # Redirect to this URL after leaving Dial. 
+      'method' => "GET", # Submit to action URL using GET or POST.
+      'redirect' => "true" # If set to false, do not redirect to action URL. The call will be controlled based on the XML returned from the action URL.
+    );
 
-        // Add Speak tag
-        $body = "Connecting your call..";
-        $attributes = array(
-          'action' => "https://morning-ocean-4669.herokuapp.com/dial_status/", # Redirect to this URL after leaving Dial. 
-          'method' => "GET", # Submit to action URL using GET or POST.
-          'redirect' => "true" # If set to false, do not redirect to action URL. The call will be controlled based on the XML returned from the action URL.
-        );
+    $r->addSpeak($body);
 
-        $r->addSpeak($body);
+    // Add Dial tag
+    $d = $r->addDial($attributes);
+    $number = "11111111111";
+    $d->addNumber($number);
 
-        // Add Dial tag
-        $d = $r->addDial($attributes);
-        $number = "11111111111";
-        $d->addNumber($number);
+    Header('Content-type: text/xml');
+    echo($r->toXML());
 
-        $res->headers->set('Content-Type', 'text/xml');
-        $res->setBody($r->toXML());
-        $app->response = $res;
-
-    })->name('connect')->via('GET', 'POST');
-
-    $app->run();
 /*
 Sample Output
 <Response>

@@ -1,28 +1,16 @@
 <?php
     require_once "./plivo.php";
-    require 'vendor/autoload.php';
+    
+    // Generate a Play XML with the details of the audio file to play on the call.
+    $body = "https://s3.amazonaws.com/plivocloud/Trumpet.mp3";
 
-    $app = new \Slim\Slim();
+    $r = new Response(); 
 
-    $app->map('/speak', function() use ($app) {
-        
-        $res = new \Slim\Http\Response();
-        
-        // Generate a Play XML with the details of the audio file to play on the call.
-        $body = "https://s3.amazonaws.com/plivocloud/Trumpet.mp3";
+    // Add Play element
+    $r->addPlay($body);
 
-        $r = new Response(); 
-
-        // Add Play element
-        $r->addPlay($body);
-
-        $res->headers->set('Content-Type', 'text/xml');
-        $res->setBody($r->toXML());
-        $app->response = $res;
-
-    })->name('speak')->via('GET', 'POST');
-
-    $app->run();
+    Header('Content-type: text/xml');
+    echo($r->toXML());
 
 /*
 Sample Output

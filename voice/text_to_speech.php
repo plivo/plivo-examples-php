@@ -1,40 +1,33 @@
 <?php
     require_once "./plivo.php";
-    require 'vendor/autoload.php';
 
-    $app = new \Slim\Slim();
+    // Generate a Speak XML with the details of the text to play on the call.
+    $body = 'This is English!';
+    $params = array(  
+        'language' => "en-GB", 
+        'voice' => "MAN"
+    );
 
-    $app->map('/speak', function() use ($app) {
-    
-        $res = new \Slim\Http\Response();
+    $r = new Response(); 
 
-        // Generate a Speak XML with the details of the text to play on the call.
-        $body = 'This is English!';
-        $params = array(  
-            'language' => "en-GB", 
-            'voice' => "MAN"
-        );
+    // Add speak element
+    $r->addSpeak($body,$params);
 
-        $r = new Response(); 
+    $body1 = 'Ce texte généré aléatoirement peut-être utilisé dans vos maquettes';
+    $params1 = array(  
+        'language' => "fr-FR"
+    );
 
-        // Add speak element
-        $r->addSpeak($body,$params);
+    $r->addSpeak($body1,$params1);
 
-        $body1 = 'Ce texte généré aléatoirement peut-être utilisé dans vos maquettes';
-        $params1 = array(  
-            'language' => "fr-FR"
-        );
+    $body2 = 'Это случайно сгенерированный текст может быть использован в макете';
+    $params2 = array(  
+        'language' => "ru-RU",
+        'voice' => "MAN" 
+    );
 
-        $r->addSpeak($body1,$params1);
-
-        $body2 = 'Это случайно сгенерированный текст может быть использован в макете';
-        $params2 = array(  
-            'language' => "ru-RU",
-            'voice' => "MAN" 
-
-    })->name('speak')->via('GET', 'POST');
-
-    $app->run();
+    Header('Content-type: text/xml');
+    echo($r->toXML());
 
 /*
 Sample Output

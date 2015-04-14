@@ -1,71 +1,67 @@
 <?php
     require_once "./plivo.php";
-    require 'vendor/autoload.php';
 
-    $app->map('/response/conference', function() use ($app) {
-        $res = new \Slim\Http\Response();
+    $r = new Response();
 
-        $r = new Response();
+    $body = "You will now be placed into a demo conference. This is brought to you by Plivo. To know more visit us at plivo.com";
+    $r->addSpeak($body);
 
-        $body = "You will now be placed into a demo conference. This is brought to you by Plivo. To know more visit us at plivo.com";
-        $r->addSpeak($body);
+    $params = array(
+            'enterSound' => "beep:2", # Used to play a sound when a member enters the conference
+            'record' => "true", # Option to record the call
+            'action' => "https://example.com/conf_action.php", # URL to which the API can send back parameters
+            'method' => "GET", # method to invoke the action Url
+            'record' => "true", # Option to record the call 
+            'callbackUrl' => "https://example.com/conf_callback.php", # If specified, information is sent back to this URL
+            'callbackMethod' => "GET" # Method used to notify callbackUrl
+            # For moderated conference
+            'startConferenceOnEnter' => "true", # When a member joins the conference with this attribute set to true, the conference is started.
+                                   # If a member joins a conference that has not yet started, with this attribute value set to false, 
+                                   # the member is muted and hears background music until another member joins the conference
+            'endConferenceOnExit' => "true" # If a member with this attribute set to true leaves the conference, the conference ends and all 
+                               # other members are automatically removed from the conference. 
+        );
+    
+    $conference_nae = "demo";
+    $r->addConference($conference_name, $params);
 
-        $params = array(
-                'enterSound' => "beep:2", # Used to play a sound when a member enters the conference
-                'record' => "true", # Option to record the call
-                'action' => "https://glacial-harbor-8656.herokuapp.com/testing.php/response/conf_action/", # URL to which the API can send back parameters
-                'method' => "GET", # method to invoke the action Url
-                'record' => "true", # Option to record the call 
-                'callbackUrl' => "https://glacial-harbor-8656.herokuapp.com/testing.php/response/conf_callback/", # If specified, information is sent back to this URL
-                'callbackMethod' => "GET" # Method used to notify callbackUrl
-                # For moderated conference
-                'startConferenceOnEnter' => "true", # When a member joins the conference with this attribute set to true, the conference is started.
-                                       # If a member joins a conference that has not yet started, with this attribute value set to false, 
-                                       # the member is muted and hears background music until another member joins the conference
-                'endConferenceOnExit' => "true" # If a member with this attribute set to true leaves the conference, the conference ends and all 
-                                   # other members are automatically removed from the conference. 
-            );
-        
-        $conference_nae = "demo";
-        $r->addConference($conference_name, $params);
+    Header('Content-type: text/xml');
+    echo($r->toXML());
 
-        $res->headers->set('Content-Type', 'text/xml');
-        $res->setBody($r->toXML());
-        $app->response = $res;
+?>
 
-    })->name('conference')->via('GET', 'POST');
+<!--conf_action.php-->
 
-    $app->map('/response/conf_action', function() use ($app) {
+<?php
 
-        $conf_name = $_REQUEST['ConferenceName'];
-        $conf_uuid = $_REQUEST['ConferenceUUID'];
-        $conf_mem_id = $_REQUEST['ConferenceMemberID'];
-        $record_url = $_REQUEST['RecordUrl'];
-        $record_id = $_REQUEST['RecordingID'];
+    $conf_name = $_REQUEST['ConferenceName'];
+    $conf_uuid = $_REQUEST['ConferenceUUID'];
+    $conf_mem_id = $_REQUEST['ConferenceMemberID'];
+    $record_url = $_REQUEST['RecordUrl'];
+    $record_id = $_REQUEST['RecordingID'];
 
-        error_log("Conference Name : $conf_name, Conference UUID : conf_uuid, Conference Member ID : conf_mem_id, Record URL : $record_url, Record ID : $record_id");
-        echo "Conference Name : $conf_name, Conference UUID : conf_uuid, Conference Member ID : conf_mem_id, Record URL : $record_url, Record ID : $record_id";
+    error_log("Conference Name : $conf_name, Conference UUID : conf_uuid, Conference Member ID : conf_mem_id, Record URL : $record_url, Record ID : $record_id");
+    echo "Conference Name : $conf_name, Conference UUID : conf_uuid, Conference Member ID : conf_mem_id, Record URL : $record_url, Record ID : $record_id";
 
-    })->name('conf_action')->via('GET', 'POST');
-  
-    $app->map('/response/conf_callback', function() use ($app) {
+?>
 
-        $conf_action = $_REQUEST['ConferenceAction'];
-        $conf_name = $_REQUEST['ConferenceName'];
-        $conf_uuid = $_REQUEST['ConferenceUUID'];
-        $conf_mem_id = $_REQUEST['ConferenceMemberID'];
-        $call_uuid = $_REQUEST['CallUUID'];
-        $record_url = $_REQUEST['RecordUrl'];
-        $record_id = $_REQUEST['RecordingID'];
+<!--conf_callback.php-->
 
-        error_log("Conference Action : $conf_action, Conference Name : $conf_name, Conference UUID : conf_uuid, 
-            Conference Member ID : conf_mem_id, Call UUID : $call_uuid, Record URL : $record_url, Record ID : $record_id");
-        echo "Conference Action : $conf_action, Conference Name : $conf_name, Conference UUID : conf_uuid, 
-            Conference Member ID : conf_mem_id, Call UUID : $call_uuid, Record URL : $record_url, Record ID : $record_id";
+<?php
 
-    })->name('conf_callback')->via('GET', 'POST');      
+    $conf_action = $_REQUEST['ConferenceAction'];
+    $conf_name = $_REQUEST['ConferenceName'];
+    $conf_uuid = $_REQUEST['ConferenceUUID'];
+    $conf_mem_id = $_REQUEST['ConferenceMemberID'];
+    $call_uuid = $_REQUEST['CallUUID'];
+    $record_url = $_REQUEST['RecordUrl'];
+    $record_id = $_REQUEST['RecordingID'];
 
-    $app->run();
+    error_log("Conference Action : $conf_action, Conference Name : $conf_name, Conference UUID : conf_uuid, 
+        Conference Member ID : conf_mem_id, Call UUID : $call_uuid, Record URL : $record_url, Record ID : $record_id");
+    echo "Conference Action : $conf_action, Conference Name : $conf_name, Conference UUID : conf_uuid, 
+        Conference Member ID : conf_mem_id, Call UUID : $call_uuid, Record URL : $record_url, Record ID : $record_id";
+
 
 /*
 Sample Output

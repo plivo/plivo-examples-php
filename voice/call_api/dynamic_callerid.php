@@ -1,30 +1,21 @@
 <?php
     require_once "./plivo.php";
-    require 'vendor/autoload.php';
 
     # Set te caller ID using Dial XML
 
-    $app->map('/hangup', function() use ($app) {
-        $res = new \Slim\Http\Response();
+    $r = new Response();
 
-        $r = new Response();
+    // Generate a Dial XML ans set the caller ID
+    $params = array(
+            'callerId' => '1111111111' # Caller ID
+        );
 
-        // Generate a Dial XML ans set the caller ID
-        $params = array(
-                'callerId' => '1111111111' # Caller ID
-            );
+    $d = $r->addDial($params);
+    $number = '2222222222';
+    $r->addNumber($number);
 
-        $d = $r->addDial($params);
-        $number = '2222222222';
-        $r->addNumber($number);
-
-        $res->headers->set('Content-Type', 'text/xml');
-        $res->setBody($r->toXML());
-        $app->response = $res;
-
-    })->name('speak')->via('GET', 'POST');
-
-    $app->run();
+    Header('Content-type: text/xml');
+    echo($r->toXML());
 
 /*
 Sample successful output
