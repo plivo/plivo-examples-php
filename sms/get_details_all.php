@@ -15,7 +15,8 @@
             'limit' => '2',
             'offset' => '0',
             'message_direction ' => 'outbound',
-            'message_state' => 'sent'
+            'message_state' => 'sent',
+            'subaccount' => 'SubAccount_AUTH_ID'
         );
 
     // Fetch the details
