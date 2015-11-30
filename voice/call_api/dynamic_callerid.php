@@ -1,5 +1,6 @@
 <?php
-    require_once "./plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\Response;
 
     # Set te caller ID using Dial XML
 
@@ -12,7 +13,7 @@
 
     $d = $r->addDial($params);
     $number = '2222222222';
-    $r->addNumber($number);
+    $d->addNumber($number);
 
     Header('Content-type: text/xml');
     echo($r->toXML());
@@ -25,7 +26,11 @@ Sample successful output
     </Dial>
 </Response>
 */
+?>
 
+<?php
+    require 'vendor/autoload.php';
+    use Plivo\RestAPI;
     # Set the caller ID using Call API
 
     $auth_id = "Your AUTH_ID";
@@ -36,7 +41,7 @@ Sample successful output
     $params = array(
         'to' => '14155069431', # The phone numer to which the all has to be placed
         'from' => '18583650866', # The phone number to be used as the caller id
-        'answer_url' => "https://glacial-harbor-8656.herokuapp.com/testing.php/detect", # The URL invoked by Plivo when the outbound call is answered
+        'answer_url' => "https://example.com/detect", # The URL invoked by Plivo when the outbound call is answered
         'answer_method' => "GET", # The method used to call the answer_url
     );
 
@@ -51,4 +56,5 @@ Sample successful output
         [message] => call fired 
         [request_uuid] => 5b2db3d3-f478-4b63-992c-e47c527572e8 
 )
-*/        
+*/ 
+?>       

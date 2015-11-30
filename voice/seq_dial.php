@@ -1,5 +1,6 @@
 <?php
-    require_once "./plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\Response;
 
     $r = new Response();
 
@@ -14,7 +15,7 @@
     $d->addNumber($number1);
 
     $d = $r->addDial();
-    $number2 = "1111111111";
+    $number2 = "2222222222";
     $d->addNumber($number2);
 
     Header('Content-type: text/xml');
@@ -23,7 +24,7 @@
 /*
 Sample Output
 <Response>
-    <Dial timeout="20" action="https://glacial-harbor-8656.herokuapp.com/testing.php/dial_status/">
+    <Dial timeout="20" action="https://example.com/dial_status/">
         <Number>1111111111</Number>
     </Dial>
     <Dial>

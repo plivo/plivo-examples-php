@@ -1,5 +1,6 @@
 <?php
-    require_once "./plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\Response;
  
     $r = new Response();
 
@@ -30,7 +31,8 @@
 <!--recording_action.php-->
 
 <?php
-    require_once "./plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\RestAPI;
 
     $digit = $_REQUEST['Digits'];
     $uuid = $_REQUEST['CallUUID'];

@@ -1,17 +1,19 @@
 <?php
-    require_once "plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\RestAPI;
+    
     $auth_id = "Your AUTH_ID";
     $auth_token = "Your AUTH_TOKEN";
 
     $p = new RestAPI($auth_id, $auth_token);
 
-    # API ID is returned for every API request. 
+    # API ID is returned for every API request.
     # Request UUID is request id of the call. This ID is returned as soon as the call is fired irrespective of whether the call is answered or not
 
     $params = array(
         'to' => '2222222222', # The phone numer to which the all has to be placed
         'from' => '1111111111', # The phone number to be used as the caller id
-        'answer_url' => "https://glacial-harbor-8656.herokuapp.com/testing.php/speak", # The URL invoked by Plivo when the outbound call is answered
+        'answer_url' => "https://example.com/speak", # The URL invoked by Plivo when the outbound call is answered
         'answer_method' => "GET", # The method used to call the answer_url
     );
 

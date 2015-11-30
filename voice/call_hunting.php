@@ -1,5 +1,6 @@
 <?php
-    require_once "./plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\Response;
 
     // Simultaneous dialing is useful when there are SIP users and numbers that you want to dial. 
     // The first call that connects will cancel all other tries.

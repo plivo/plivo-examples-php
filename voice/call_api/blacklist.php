@@ -1,6 +1,7 @@
 <?php
-    require_once "./plivo.php";
-
+    require 'vendor/autoload.php';
+    use Plivo\Response;
+    
     $from_number = $_REQUEST['From'];
     $caller = array('1111111111', '2222222222', '3333333333');
 

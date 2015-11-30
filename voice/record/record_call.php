@@ -1,6 +1,6 @@
 <?php
-    require_once "./plivo.php";
-
+    require 'vendor/autoload.php';
+    use Plivo\Response;
 
     # Generate a Record XML
     $r = new Response(); 

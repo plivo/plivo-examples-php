@@ -1,5 +1,6 @@
 <?php
-    require_once "./plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\Response;
 
     $r = new Response();
 
@@ -13,7 +14,7 @@
             'method' => "GET", # method to invoke the action Url
             'record' => "true", # Option to record the call 
             'callbackUrl' => "https://example.com/conf_callback.php", # If specified, information is sent back to this URL
-            'callbackMethod' => "GET" # Method used to notify callbackUrl
+            'callbackMethod' => "GET", # Method used to notify callbackUrl
             # For moderated conference
             'startConferenceOnEnter' => "true", # When a member joins the conference with this attribute set to true, the conference is started.
                                    # If a member joins a conference that has not yet started, with this attribute value set to false, 
@@ -22,7 +23,7 @@
                                # other members are automatically removed from the conference. 
         );
     
-    $conference_nae = "demo";
+    $conference_name = "demo";
     $r->addConference($conference_name, $params);
 
     Header('Content-type: text/xml');

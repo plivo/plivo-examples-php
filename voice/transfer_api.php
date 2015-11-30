@@ -1,5 +1,6 @@
 <?php
-    require_once "plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\Response;
 
     $r = new Response(); 
 
@@ -24,14 +25,14 @@
 
     Header('Content-type: text/xml');
     echo($r->toXML());
-
 ?>
 
 <!-- transfer_action.php -->
 
 <?php
-
-    $r = new Response(); 
+    require 'vendor/autoload.php';
+    use Plivo\RestAPI;
+    
     $digit = $_REQUEST['Digits'];
     $call_uuid = $_REQUEST['CallUUID'];
 
@@ -45,7 +46,7 @@
     if ($digit == "1"){
         $params = array(
             'call_uuid' => $call_uuid, # ID of the call
-            'aleg_url' => 'https://glacial-harbor-8656.herokuapp.com/testing.php/connect', # URL to transfer for aleg
+            'aleg_url' => 'https://example.com/connect', # URL to transfer for aleg
             'aleg_method' => 'GET', # Method to invoke the aleg_url
         );
 
@@ -59,7 +60,7 @@
     /*
     Sample Output
     <Response>
-        <GetDigits action="http://morning-ocean-4669.herokuapp.com/transfer_action/" method="GET" numDigits="1" redirect="false" retries="1" timeout="7">
+        <GetDigits action="https://example.com/transfer_action.php" method="GET" numDigits="1" redirect="false" retries="1" timeout="7">
             <Speak>Press 1 to transfer this call</Speak>
         </GetDigits>
         <Wait length="10" />

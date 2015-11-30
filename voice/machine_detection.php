@@ -1,6 +1,7 @@
 <!-- make_call.php-->
 <?php
-    require_once "./plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\RestAPI;
 
     $auth_id = "Your AUTH_ID";
     $auth_token = "Your AUTH_TOKEN";
@@ -52,7 +53,8 @@
 <!-- detect.php-->
 
 <?php
-    require_once "./plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\Response;
 
     $r = new Response();
 

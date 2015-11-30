@@ -1,5 +1,6 @@
 <?php
-    require_once "./plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\Response;
     
     // Generate a Play XML with the details of the audio file to play on the call.
     $body = "https://s3.amazonaws.com/plivocloud/Trumpet.mp3";

@@ -1,5 +1,6 @@
 <?php
-    require_once "./plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\Response;
 
     // Generate a Speak XML with the details of the text to play on the call.
     $body = 'This is English!';
@@ -25,6 +26,8 @@
         'language' => "ru-RU",
         'voice' => "MAN" 
     );
+
+    $r->addSpeak($body2,$params2);
 
     Header('Content-type: text/xml');
     echo($r->toXML());

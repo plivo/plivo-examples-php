@@ -1,5 +1,6 @@
 <?php
-    require_once "./plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\Response;
 
     # Generates a Conference XML
     $r = new Response();
@@ -16,13 +17,13 @@
     
     Header('Content-type: text/xml');
     echo($r->toXML());
-
 ?>
 
 <!--conf_callback.php-->
 
 <?php
-    require_once "./plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\RestAPI;
 
     # Record API is called in the callback URL to record the conference
     

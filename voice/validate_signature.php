@@ -1,5 +1,5 @@
 <?php
-    include 'plivo.php';
+    require 'vendor/autoload.php';
 
     $auth_token = "Your AUTH_TOKEN";
 

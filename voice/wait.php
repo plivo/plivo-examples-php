@@ -1,5 +1,6 @@
 <?php
-    require_once "./plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\Response;
 
     $r = new Response();
 
@@ -32,10 +33,11 @@ Sample Wait XML
 
 ?>
 
+<!-- Delayed answer -->
 
 <?php
-
-    require_once "./plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\Response;
     
     $r = new Response();
 
@@ -63,9 +65,11 @@ Sample Wait XML
 
 ?>
 
-<?php
+<!-- Beep detetion -->
 
-    require_once "./plivo.php";
+<?php
+    require 'vendor/autoload.php';
+    use Plivo\Response;
     
     $r = new Response();
 

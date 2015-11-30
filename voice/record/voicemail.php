@@ -1,5 +1,6 @@
 <?php
-    require_once "./plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\Response;
 
     # Generate a Record XML and ask the caller to leave a message
     $r = new Response();
@@ -19,14 +20,12 @@
 
     Header('Content-type: text/xml');
     echo($r->toXML());
-
 ?>
 
 <!--record_action.php-->
 
 <?php
     # Action URL Example
-
     $record_url = $_REQUEST['RecordUrl'];
     $record_duration = $_REQUEST['RecordingDuration'];
     $record_id = $_REQUEST['RecordingID'];

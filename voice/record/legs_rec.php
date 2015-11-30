@@ -1,5 +1,6 @@
 <?php
-    require_once "./plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\Response;
 
     # A call is made to the plivo number. 
     # The answer_url returns and XML that starts recording the session and then dials to another number.
@@ -36,14 +37,13 @@
 
     Header('Content-type: text/xml');
     echo($r->toXML());
-
 ?>
 
 <!--dial_outbound.php-->
 
 <?php
-
-    require_once "./plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\RestAPI;
 
     # The Callback URL of Dial will make a request to the Record API which will record only the B Leg
     # Play API is invoked which will play a music only on the B Leg.
@@ -84,15 +84,12 @@
     {
         print("Invalid");
     }
-
 ?>
 
 <!--recording_callback.php-->
 
 <?php
-
     # The Callback URL of record api will return the B Leg record details.
-
     $record_url = $_REQUEST['record_url'];
     $record_duration = $_REQUEST['recording_duration'];
     $record_id = $_REQUEST['recording_id'];

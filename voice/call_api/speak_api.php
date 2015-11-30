@@ -1,5 +1,6 @@
 <?php
-    require_once "./plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\Response;
 
     $r = new Response(); 
     $getdigits_action_url = "https://example.com/speak_action.php";
@@ -29,8 +30,9 @@
 <!--speak_action.php-->
 
 <?php
-    require_once "./plivo.php";
-
+    require 'vendor/autoload.php';
+    use Plivo\RestAPI;
+    
     $r = new Response(); 
     $digit = $_REQUEST['Digits'];
     $call_uuid = $_REQUEST['CallUUID'];

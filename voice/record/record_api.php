@@ -1,5 +1,7 @@
 <?php
-    require_once "./plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\RestAPI;
+    
     $auth_id = "Your AUTH_ID";
     $auth_token = "Your AUTH_TOKEN";
 
@@ -10,10 +12,10 @@
     $params = array(
         'call_uuid' => "xxxxxxxxxxx", # ID of the call
         'time_limit' => '40', # Max recording duration in seconds
-        'callback_url' => "https://glacial-harbor-8656.herokuapp.com/testing.php/record_action/", # The URL invoked by the API when the recording ends
+        'callback_url' => "https://example.com/record_action/", # The URL invoked by the API when the recording ends
         'callback_method' => "GET", # The method which is used to invoke the callback_url
         'transcriptionType' => 'auto', # The type of transcription required
-        'transcriptionUrl' => "https://glacial-harbor-8656.herokuapp.com/testing.php/transcription/", # The URL where the transcription while be sent from Plivo
+        'transcriptionUrl' => "https://example.com/transcription/", # The URL where the transcription while be sent from Plivo
         'transcriptionMethod' => 'GET' # The method used to invoke transcriptionUrl 
     );
 
@@ -33,7 +35,7 @@
 
     $params = array(
         'conference_name' => "demo", # The conference name
-        'callback_url' => "https://glacial-harbor-8656.herokuapp.com/testing.php/record_action/", # The URL invoked by the API when the recording ends  
+        'callback_url' => "https://example.com/record_action/", # The URL invoked by the API when the recording ends  
         'callback_method' => "GET" # The method which is used to invoke the callback_url
     );
 

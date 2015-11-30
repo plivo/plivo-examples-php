@@ -1,5 +1,6 @@
 <?php
-    require_once "./plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\Response;
 
     $r = new Response(); 
 
@@ -14,18 +15,18 @@
     $number1 = "11111111111";
     $d->addNumber($number1);
     $number2 = "2222222222";
-    $d->addNumber($number1);
+    $d->addNumber($number2);
     $number3 = "abcd1234@phone.plivo.com<";
     $d->addUser($number3);
 
     Header('Content-type: text/xml');
     echo($r->toXML());
-
 ?>
 
 <!-- confirm_sound.php-->
 <?php   
-    require_once "./plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\Response;
 
     $r = new Response(); 
 

@@ -1,5 +1,6 @@
 <?php
-    require_once "plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\Response;
 
     # This file will be played when a caller presses 2.
     $PLIVO_SONG = "https://s3.amazonaws.com/plivocloud/music.mp3";
@@ -73,14 +74,13 @@
 
             break;
     }
-
 ?>
 
 <!--phone_tree.php-->
 
 <?php
-
-    require_once "plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\Response;
     
     $WRONG_INPUT_MESSAGE = "Sorry, it's a wrong input." ;
 

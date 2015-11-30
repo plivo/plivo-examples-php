@@ -1,5 +1,6 @@
 <?php
-    require_once "./plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\Response;
 
     $from_number = $_REQUEST['From'];
     $callers = array(
@@ -10,9 +11,9 @@
     
     $r = new Response();
     
-    if (array_key_exists($from_number, $caller))
+    if (array_key_exists($from_number, $callers))
     {
-        $body = "Hello {$caller[$from_number]}" ;
+        $body = "Hello {$callers[$from_number]}" ;
         $r->addSpeak($body);
     }
     else

@@ -1,5 +1,6 @@
 <?php
-    require_once "./plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\Response;
 
     // Feth the from_number from the URL
     $from_numbr = $_REQUEST['From'];

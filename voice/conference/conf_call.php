@@ -1,5 +1,6 @@
 <?php
-    require_once "./plivo.php";
+    require 'vendor/autoload.php';
+    use Plivo\RestAPI;
     
     $auth_id = "Your AUTH_ID";
     $auth_token = "Your AUTH_TOKEN";
@@ -11,7 +12,7 @@
     $params = array(
         'to' => '1111111111<2222222222', # The phon number to be called
         'from' => $plivo_number, # The phone number to be used as the caller id
-        'answer_url' => "https://glacial-harbor-8656.herokuapp.com/testing.php/response/conference", # The URL invoked by Plivo when the outbound call is answered
+        'answer_url' => "https://example.com/conference_xml.php", # The URL invoked by Plivo when the outbound call is answered
         'answer_method' => "GET" # The method used to call the answer_url
     );
     
