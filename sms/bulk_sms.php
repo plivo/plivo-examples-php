@@ -1,8 +1,11 @@
 <?php
-    require_once '../plivo.php';
+    require 'vendor/autoload.php';
+    use Plivo\RestAPI;
     $auth_id = "Your AUTH_ID";
     $auth_token = "Your AUTH_TOKEN";
+
     $p = new RestAPI($auth_id, $auth_token);
+    
     // Send a message
     $params = array(
             'src' => '1111111111', // Sender's phone number with country code

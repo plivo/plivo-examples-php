@@ -1,5 +1,6 @@
 <?php
-    require_once 'plivo.php';
+    require 'vendor/autoload.php';
+    use Plivo\RestAPI;
     $auth_id = "Your AUTH_ID";
     $auth_token = "Your AUTH_TOKEN";
     

@@ -1,5 +1,6 @@
 <?php
-    require_once 'plivo.php';
+    require 'vendor/autoload.php';
+    use Plivo\Response;
     
     // Sender's phone numer
     $from_number = $_REQUEST["From"];
@@ -12,7 +13,7 @@
 
     // Output the text which was received, you could
     // also store the text in a database.
-    echo("Message received from $from_number : $text");
+    // echo("Message received from $from_number : $text");
 
     $params = array(
             'src' => $to_number, 
