@@ -19,7 +19,7 @@
 
     // Print the response
     echo "Response : ";
-    print_r $response['response'];
+    print_r($response['response']);
 
     // Print the Api ID
     echo "<br> Api ID : {$response['response']['api_id']} <br>";
