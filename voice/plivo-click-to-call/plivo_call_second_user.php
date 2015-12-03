@@ -1,17 +1,18 @@
 <?php
-    require 'plivo.php';
-    	
+    require 'vendor/autoload.php';
+    use Plivo\Response;
+
     $dst = $_REQUEST['TO'];
     $src = $_REQUEST['CLID'];
     if(! $src) {
         $src = $_REQUEST['From'];
     }
     $cname = $_REQUEST['CallerName'];
-    
+
     $response = new Response();
     if($dst) {
         $dial_params = array();
-        if($src) 
+        if($src)
             $dial_params['callerId'] = $src;
         if($cname)
             $dial_params['callerName'] = $cname;
@@ -25,7 +26,7 @@
     } else {
         $response->addHangup();
     }
-    
+
     header("Content-Type: text/xml");
     echo($response->toXML());
 ?>
