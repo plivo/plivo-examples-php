@@ -1,5 +1,7 @@
 <?php
     require 'vendor/autoload.php';
+    use Plivo\RestAPI;
+    use Plivo\Response;
 
     $auth_token = "Your AUTH_TOKEN";
 
@@ -8,8 +10,8 @@
     $url = 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 
     $uri = explode('?',$url);
-    $uri1 = $uri[0];    
-    
+    $uri1 = $uri[0];
+
     $parse = parse_url($url,PHP_URL_QUERY);
 
     parse_str($parse, $get_array);
@@ -17,20 +19,26 @@
     $post_params = $_POST;
     $array = array_merge($get_array,$post_params);
 
-    $valid = validate_signature($uri1,$array,$signature,$auth_token);
-    // echo $valid;
+    $valid = RestAPI::validate_signature($uri1,$array,$signature,$auth_token);
+    $valid_message = "Signature is " . ($valid ? "" : "not ") . "valid.";
 
-    // Generate a Speak XML with the details of the text to play on the call.
-    $body = 'Hi, Calling from Plivo';
-    $attributes = array (
-    'loop' => 2,
-    );
+    // Report signature validity to web server log
+    error_log($valid_message);
 
-    $r = new Response(); 
+    if ($valid) {
+        // Signature is valid
+        $r = new Response();
 
-    // Add speak element
-    $r->addSpeak($body,$attributes);
+        // Generate a Speak XML with the details of the text to play on the call.
+        $body = 'Hi, Calling from Plivo';
 
-    Header('Content-type: text/xml');
-    echo($r->toXML());
+        // Add speak element
+        $r->addSpeak($valid_message);
+
+        Header('Content-type: text/xml');
+        echo($r->toXML());
+    } else {
+        // Signature is invalid
+        error_log("Error! Something is wrong. Please check!");
+    }
 ?>
