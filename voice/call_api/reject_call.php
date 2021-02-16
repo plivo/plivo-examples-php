@@ -1,21 +1,22 @@
 <?php
-    require 'vendor/autoload.php';
-    use Plivo\Response;
+require 'vendor/autoload.php';
 
-    $r = new Response();
+use Plivo\Response;
 
-    // Generate a Hangup XML
-    $params = array(
-            'reason' => 'busy', # Specify the reason for hangup
-            'schedule' => '60' # Schedule the hangup
-        );
+$r = new Response();
 
-    $body = "This call will be hung up in 1 minute";
-    $r->addSpeak($body);
-    $r->addHangup($params);
+// Generate a Hangup XML
+$params = array(
+    'reason' => 'busy', # Specify the reason for hangup
+    'schedule' => '60' # Schedule the hangup
+);
 
-    Header('Content-type: text/xml');
-    echo($r->toXML());
+$body = "This call will be hung up in 1 minute";
+$r->addSpeak($body);
+$r->addHangup($params);
+
+Header('Content-type: text/xml');
+echo ($r->toXML());
 
 /*
 Sample Output

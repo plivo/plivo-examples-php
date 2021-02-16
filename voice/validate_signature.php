@@ -1,44 +1,39 @@
 <?php
-    require 'vendor/autoload.php';
-    use Plivo\RestAPI;
-    use Plivo\Response;
+require 'vendor/autoload.php';
+use Plivo\Exceptions\PlivoValidationException;
+use Plivo\Util\v3SignatureValidation;
+use Plivo\XML\Response;
 
-    $auth_token = "Your AUTH_TOKEN";
-
-    $signature = $_SERVER["HTTP_X_PLIVO_SIGNATURE"];
-
+if (preg_match('/speak/', $_SERVER["REQUEST_URI"])) {
+    $auth_token = "your_auth_token";
+    $signature = @$_SERVER["X-Plivo-Signature-V3"] ?: 'signature';
+    $nonce = @$_SERVER["X-Plivo-Signature-V3-Nonce"] ?: 'nonce';
     $url = 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
-
-    $uri = explode('?',$url);
-    $uri1 = $uri[0];
-
-    $parse = parse_url($url,PHP_URL_QUERY);
-
-    parse_str($parse, $get_array);
-
-    $post_params = $_POST;
-    $array = array_merge($get_array,$post_params);
-
-    $valid = RestAPI::validate_signature($uri1,$array,$signature,$auth_token);
-    $valid_message = "Signature is " . ($valid ? "" : "not ") . "valid.";
-
-    // Report signature validity to web server log
-    error_log($valid_message);
-
-    if ($valid) {
-        // Signature is valid
-        $r = new Response();
-
-        // Generate a Speak XML with the details of the text to play on the call.
-        $body = 'Hi, Calling from Plivo';
-
-        // Add speak element
-        $r->addSpeak($valid_message);
-
-        Header('Content-type: text/xml');
-        echo($r->toXML());
+    $method = $_SERVER['REQUEST_METHOD'];
+    $SVUtil = new v3SignatureValidation();
+    if ($method == "GET") {
+        try {
+            $valid = $SVUtil->validateV3Signature($method, $url, $nonce, $auth_token, $signature);
+        } catch (PlivoValidationException $e) {
+            echo("error");
+        }
     } else {
-        // Signature is invalid
-        error_log("Error! Something is wrong. Please check!");
+        $body = file_get_contents("php://input");
+        $params = json_decode($body, true);
+        try {
+            $valid = $SVUtil->validateV3Signature($method, $url, $nonce, $auth_token, $signature, $params);
+        } catch (PlivoValidationException $e) {
+            echo("error");
+        }
     }
-?>
+    echo $valid;
+    $body = 'Hi, Calling from Plivo';
+    $attributes = array(
+        'loop' => 3,
+    );
+    $r = new Response();
+    $r->addSpeak($body, $attributes);
+    echo($r->toXML());
+} else {
+    echo "<p>Welcome to Plivo</p>";
+}

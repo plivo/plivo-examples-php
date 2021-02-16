@@ -1,29 +1,29 @@
 <?php
-    require 'vendor/autoload.php';
-    use Plivo\RestAPI;
-    $auth_id = "Your AUTH_ID";
-    $auth_token = "Your AUTH_TOKEN";
+require 'vendor/autoload.php';
+use Plivo\RestClient;
 
-    $p = new RestAPI($auth_id, $auth_token);
-
-    // Send a message
-    $params = array(
-            'src' => 'ALPHA-ID', // Sender's Alphanumeric ID
-            'dst' => '447441906862', // Receiver's phone number with country ode
-            'text' => 'Hi, Message from Plivo' // Your SMS text message
-        );
-
-    $response = $p->send_message($params);
-
-    // Print the response
-    print_r ($response['response']);
+$client = new RestClient("auth_id", "auth_token");
+$response = $client->messages->create(
+ 'ALPHA-ID', // Sender's Alphanumeric ID
+  ['+14152223333'], // receiver's phone number with country code
+  "Hello, this is a sample text", // Your SMS text message
+   // 'こんにちは、元気ですか？' # Your SMS Text Message - Japanese
+   // 'Ce est texte généré aléatoirement' # Your SMS Text Message - French
+  ["url"=>"http://foo.com/sms_status/"],
+);
+print_r($response);
 ?>
 
 <!--
 Sample Output
-( 
-    [api_id] => 56007e9e-a263-11e4-b932-22000ac50fac 
-    [message] => message(s) queued 
-    [message_uuid] => Array ( [0] => 561ac844-a263-11e4-890b-22000aec819c ) 
+(
+    [messageUuid:protected] => Array
+        (
+            [0] => a3ade4da-7028-11eb-9c24-0242ac110004
+        )
+
+    [_message] => message(s) queued
+    [apiId] => a3a826a8-7028-11eb-9c24-0242ac110004
+    [statusCode] => 202
 )
 -->

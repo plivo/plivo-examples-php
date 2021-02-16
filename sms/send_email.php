@@ -1,58 +1,40 @@
 <?php
     // Pear Mail Library
     require_once "Mail.php";
-    
+
     // Sender's phone numer
     $from_number = $_REQUEST["From"];
-
     // Receiver's phone number - Plivo number
     $to_number = $_REQUEST["To"];
-
-    // The SMS text message which was received
+    // The text which was received on your Plivo number
     $text = $_REQUEST["Text"];
+    // Print the message
+    echo("Message received from $from_number: $text");
+    to_email($text, $from_number);
 
-    // Output the text which was received, you could
-    // also store the text in a database.
-    echo("Message received from $from_number : $text");
-    to_email($text);
-
-function to_email($text){
-
-    $from = 'From mail address';
-    $to = 'To mail address';
-    $subject = 'Mail Subject';
-    $body = $text;
-
-    $headers = array(
-        'From' => $from,
-        'To' => $to,
-        'Subject' => $subject
-    );
-
-    $smtp = Mail::factory('smtp', array(
+    function to_email($text, $from_number){
+        $from = 'From email address';
+        $to = 'To email address';
+        $subject = 'SMS from $from_number';
+        $body = $text;
+        $headers = array(
+            'From' => $from,
+            'To' => $to,
+            'Subject' => $subject
+        );
+        $smtp = Mail::factory('smtp', array(
             'host' => 'ssl://smtp.gmail.com',
             'port' => '465',
             'auth' => true,
-            'username' => 'Your mail address',
-            'password' => 'Your Password'
+            'username' => 'Your email address',
+            'password' => 'Your password'
         ));
-
-    // Send mail
-    $mail = $smtp->send($to, $headers, $body);
-
-    if (PEAR::isError($mail)) {
-        echo('<p>' . $mail->getMessage() . '</p>');
-    } else {
-        echo('<p>Message successfully sent!</p>');
+        // Send mail
+        $mail = $smtp->send($to, $headers, $body);
+        if (PEAR::isError($mail)) {
+            echo('<p>' . $mail->getMessage() . '</p>');
+        } else {
+            echo('<p>Message successfully sent!</p>');
+        }
     }
-}
-
-
 ?>
-
-<!--
-Sample Output
-
-Message received from 3333333333 : Hello, from Plivo
-Message successfully sent
--->

@@ -1,17 +1,20 @@
 <?php
-    require 'vendor/autoload.php';
-    use Plivo\RestAPI;
-    
-    $auth_id = "Your AUTH_ID";
-    $auth_token = "Your AUTH_TOKEN";
 
-    $p = new RestAPI($auth_id, $auth_token);
+require 'vendor/autoload.php';
 
-    $response = $p->get_cdrs();
+use Plivo\RestClient;
+use Plivo\Exceptions\PlivoRestException;
 
-    // print_r ($response);
+$client = new RestClient("YOUR_AUTH_ID", "YOUR_AUTH_TOKEN");
 
-    /* 
+try {
+    $response = $client->calls->list();
+    print_r($response);
+} catch (PlivoRestException $ex) {
+    print_r($ex);
+}
+
+/* 
     Sample Output
     ( 
         [status] => 200 
@@ -56,22 +59,25 @@
     ) 
     */
 
-    // FIltering the records
+// FIltering the records
 
-    $params = array(
-        'end_time__gt' => '2015-01-28 11:47', # Filter out calls according to the time of completion. gte stands for greater than or equal.
-        'call_direction' => 'outbound', # Filter the results by call direction. The valid inputs are inbound and outbound
-        'from_number' => '1111111111', # Filter the results by the number from where the call originated
-        'to_number' => '11111111111', # Filter the results by the number to which the call was made
-        'limit' => 2, # The number of results per page
-        'offset' => 0 # The number of value items by which the results should be offset
-        );
+try {
+    $response = $client->calls->list(
+        [
+            'end_time__gt' => '2015-01-28 11:47', # Filter out calls according to the time of completion. gte stands for greater than or equal.
+            'call_direction' => 'outbound', # Filter the results by call direction. The valid inputs are inbound and outbound
+            'from_number' => '1111111111', # Filter the results by the number from where the call originated
+            'to_number' => '11111111111', # Filter the results by the number to which the call was made
+            'limit' => 5, # The number of results per page
+            'offset' => 2 # The number of value items by which the results should be offset
+        ]
+    );
+    print_r($response);
+} catch (PlivoRestException $ex) {
+    print_r($ex);
+}
 
-    $response = $p->get_cdrs($params);
-
-    print_r ($response);
-
-    /*
+/*
     Sample Output
     ( 
         [status] => 200 
@@ -115,4 +121,3 @@
         ) 
     )
     */
-

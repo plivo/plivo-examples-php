@@ -1,31 +1,19 @@
 <?php
-    require 'vendor/autoload.php';
-    use Plivo\RestAPI;
-    $auth_id = "Your AUTH_ID";
-    $auth_token = "Your AUTH_TOKEN";
-    
-    $p = new RestAPI($auth_id, $auth_token);
+require 'vendor/autoload.php';
 
-    // Fetch the details
-    $response = $p->get_messages();
+use Plivo\RestClient;
 
-    // Print the response
-    print_r ($response['response']);
-
-    // Filter the response
-    $params = array(
-            'limit' => '2',
-            'offset' => '0',
-            'message_direction ' => 'outbound',
-            'message_state' => 'sent',
-            'subaccount' => 'SubAccount_AUTH_ID'
-        );
-
-    // Fetch the details
-    $response = $p->get_messages($params);    
-
-    // Print the response
-    print_r ($response['response']);
+$client = new RestClient("auth_id", "auth_token");
+$response = $client->messages->list(
+    [
+        'limit' => 2,
+        'offset' => 0,
+        'message_direction ' => 'outbound',
+        'message_state' => 'sent',
+        'subaccount' => 'subaccount_auth_id'
+    ]
+);
+print_r($response);
 ?>
 
 <!--

@@ -1,35 +1,45 @@
 <?php
-    require 'vendor/autoload.php';
-    use Plivo\RestAPI;
-    
-    $auth_id = "Your AUTH_ID";
-    $auth_token = "Your AUTH_TOKEN";
-    
-    $p = new RestAPI($auth_id, $auth_token);
 
-    // Create an Application
-    $params = array(
-            'answer_url' => 'http://example.com', # The URL Plivo will fetch when a call executes this application
-            'app_name' => 'Testing' # The name of your application
-        );
+require 'vendor/autoload.php';
 
-    $response = $p->create_application($params);
-    // print_r ($response['response']);
-    
-    /*
-    Sample Output
-    ( 
-        [api_id] => ad7a2eb8-ac45-11e4-b932-22000ac50fac 
-        [app_id] => 23061826722302672 
-        [message] => created 
-    ) 
-    */
-    
-    // Get Details of all existing Applications
-    $response = $p->get_applications();
-    // print_r ($response['response']);
+use Plivo\RestClient;
+use Plivo\Exceptions\PlivoRestException;
 
-    /*
+$client = new RestClient("YOUR_AUTH_ID", "YOUR_AUTH_TOKEN");
+
+// Create an Application
+try {
+    $response = $client->applications->create(
+        'Test Application', # The name of your application.
+        [
+            'answer_url' => 'http://answer.url', # The name of your application.
+            'answer_method' => 'POST' # The method for the URL to be invoked.
+        ]
+    );
+    print_r($response);
+} catch (PlivoRestException $ex) {
+    print_r($ex);
+}
+
+/*
+Sample Output
+( 
+    [appId:protected] => 95061338981454152
+    [_message] => created
+    [apiId] => 88c9deea-701d-11eb-b8c4-0242ac110004
+    [statusCode] => 201
+) 
+*/
+
+// Get Details of all existing Applications
+try {
+    $response = $client->applications->list();
+    print_r($response);
+} catch (PlivoRestException $ex) {
+    print_r($ex);
+}
+
+/*
     Sample Output
     ( 
         [api_id] => cff47926-ac45-11e4-b153-22000abcaa64 
@@ -81,40 +91,18 @@
     )
     */
 
-    // Print the total number of Applications
-    // echo "<br> Total count : ";
-    // echo ($response['response']['meta']['total_count']);
 
-    /*
-    Sample Output
-    Total count : 2
-    */
+// Get details of Single Application
+try {
+    $response = $client->applications->get(
+        '95061338981454152' # ID of the application for which the details have to be retrieved
+    );
+    print_r($response);
+} catch (PlivoRestException $ex) {
+    print_r($ex);
+}
 
-    // Print public_uri, default_app, default_endpoint
-    /*
-    $count = ($response['response']['meta']['total_count']);
-    echo "<br>Count : $count";
-    for ($i=0; $i<$count; $i++)
-    {
-        echo "<br> Public URI : ";
-        echo ($response['response']['objects'][i]['public_uri']);
-        echo "<br> Default App : ";
-        echo ($response['response']['objects'][i]['default_app']);
-        echo "<br> Default Endpoint App : ";
-        echo ($response['response']['objects'][i]['default_endpoint_app']);
-    }
-    */
-
-    // Get details of Single Application
-    $params = array(
-            'app_id' => '23061826722302672' # ID of the application for which the details have to be retrieved
-            
-        );
-
-    $response = $p->get_application($params);
-    // print_r ($response['response']);
-
-    /*
+/*
     Sample Output
     ( 
         [answer_method] => POST 
@@ -138,16 +126,20 @@
     ) 
     */
 
-    // Modify an Application
-    $params = array(
-            'app_id' => '23061826722302672', # ID of the applictiob for which has to be modified
-            'answer_url' => 'http://yourexample.com' # Values that have to be updated
-        );
+// Modify an Application
+try {
+    $response = $client->applications->update(
+        '1101234567899201', # ID of the applictiob for which has to be modified
+        [
+            'answer_url' => 'http://updated.answer.url' # Values that have to be updated
+        ]
+    );
+    print_r($response);
+} catch (PlivoRestException $ex) {
+    print_r($ex);
+}
 
-    $response = $p->modify_application($params);
-    // print_r ($response['response']);
-
-    /*
+/*
     Sample Output
     ( 
         [api_id] => 16bf2cf6-ac4c-11e4-b932-22000ac50fac 
@@ -155,27 +147,25 @@
     ) 
     */
 
-    // Delete an Application
-    $params = array(
-        'app_id' => '23061826722302672' # Auth ID of the sub acccount for which the details has to be deleted
-        );
+// Delete an Application
+try {
+    $response = $client->applications->delete(
+        '15784735442685051' # Auth ID of the sub acccount for which the details has to be deleted
+    );
+    print_r($response);
+} catch (PlivoRestException $ex) {
+    print_r($ex);
+}
 
-    $response = $p->delete_application($params);
-    // print_r ($response);
 
-    /*
-    Sample Output
-    ( 
-        [status] => 204 
-        [response] => 
-    )
+/*
+Sample Output
+( 
+    [response] =>
+)
 
-    Unsuccessful Output
-     ( 
-        [status] => 404 
-        [response] => Array ( 
-            [api_id] => c0cf0530-ac39-11e4-96e3-22000abcb9af 
-            [error] => not found 
-        x`) 
-     )
-    */
+Unsuccessful Output
+(
+    [message:protected] => 404
+)
+*/

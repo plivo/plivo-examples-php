@@ -1,19 +1,20 @@
 <?php
-    require 'vendor/autoload.php';
-    use Plivo\Response;
+require 'vendor/autoload.php';
 
-    $r = new Response(); 
+use Plivo\XML\Response;
 
-    // Add Speak tag
-    $body = "Sending Digits";
-    $r->addSpeak($body);
+$r = new Response();
 
-    // Add DTMF tag
-    $dtmf = "12345";
-    $r->addDTMF($dtmf);
+// Add Speak tag
+$body = "Sending Digits";
+$r->addSpeak($body);
 
-    Header('Content-type: text/xml');
-    echo($r->toXML());
+// Add DTMF tag
+$dtmf = "12345";
+$r->addDTMF($dtmf);
+
+Header('Content-type: text/xml');
+echo ($r->toXML());
 
 /*
 Sample Output

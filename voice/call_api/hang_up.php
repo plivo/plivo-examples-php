@@ -1,31 +1,32 @@
 <?php
-    require 'vendor/autoload.php';
-    use Plivo\RestAPI;
-    
-    $auth_id = "Your AUTH_ID";
-    $auth_token = "Your AUTH_TOKEN";
 
-    $p = new RestAPI($auth_id, $auth_token);
+/**
+ * Example for Call delete
+ */
+require 'vendor/autoload.php';
 
-    $params = array(
-            'call_uuid' => 'defb0706-86a6-11e4-b303-498d468c930b' # UUID of the call to be hung up
-        );
+use Plivo\RestClient;
+use Plivo\Exceptions\PlivoRestException;
 
-    $response = $p->hangup_call($params);
-    print_r ($response)
+$client = new RestClient("YOUR_AUTH_ID", "YOUR_AUTH_TOKEN");
 
-    /* 
-    Sample Output
-    ( 
-        [status] => 204 
-        [response] => 
-    )
-    Unsuccessful Output
-    ( 
-        [status] => 404 
-        [response] => Array ( 
-            [api_id] => c0cf0530-ac39-11e4-96e3-22000abcb9af 
-            [error] => not found 
-        ) 
-    )
-    */
+try {
+    $response = $client->calls->delete(
+        'eba53b9e-8fbd-45c1-9444-696d2172fbc8' # UUID of the call to be hung up
+    );
+    print_r($response);
+} catch (PlivoRestException $ex) {
+    print_r($ex);
+}
+
+/*
+Sample Output
+( 
+    [response] =>
+)
+
+Unsuccessful Output
+(
+    [message:protected] => 404
+)
+*/

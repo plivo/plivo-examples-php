@@ -1,68 +1,71 @@
 <?php
-    require 'vendor/autoload.php';
-    use Plivo\Response;
+require 'vendor/autoload.php';
 
-    $r = new Response(); 
-    $getdigits_action_url = "https://example.com/speak_action.php";
-    $params = array(
-        'action' => $getdigits_action_url,
-        'method' => 'GET',
-        'timeout' => '7',
-        'numDigits' =>  '1',
-        'retries' => '1',
-        'redirect' => 'false'
-    );
+use Plivo\Response;
 
-    $getDigits = $r->addGetDigits($params);
+$r = new Response();
+$getdigits_action_url = "https://example.com/speak_action.php";
+$params = array(
+    'action' => $getdigits_action_url,
+    'method' => 'GET',
+    'timeout' => '7',
+    'numDigits' =>  '1',
+    'retries' => '1',
+    'redirect' => 'false'
+);
 
-    $getDigits->addSpeak("Press 1 to listen to a message");
+$getDigits = $r->addGetDigits($params);
 
-    $waitparam = array(
-        'length' => '10'
-    );
-    $r->addWait($waitparam);
+$getDigits->addSpeak("Press 1 to listen to a message");
 
-    Header('Content-type: text/xml');
-    echo($r->toXML());
+$waitparam = array(
+    'length' => '10'
+);
+$r->addWait($waitparam);
+
+Header('Content-type: text/xml');
+echo ($r->toXML());
 
 ?>
 
 <!--speak_action.php-->
 
 <?php
-    require 'vendor/autoload.php';
-    use Plivo\RestAPI;
-    
-    $r = new Response(); 
-    $digit = $_REQUEST['Digits'];
-    $call_uuid = $_REQUEST['CallUUID'];
+require 'vendor/autoload.php';
 
-    $auth_id = "Your AUTH_ID";
-    $auth_token = "Your AUTH_TOKEN";
+use Plivo\RestAPI;
 
-    $p = new RestAPI($auth_id, $auth_token);
+$r = new Response();
+$digit = $_REQUEST['Digits'];
+$call_uuid = $_REQUEST['CallUUID'];
 
-    if ($digit == "1"){
-        $params = array(
-            'call_uuid' => $call_uuid, # ID of the call
-            'text' => 'Hello from Speak API', # Text to be played.
-            'voice' => 'WOMAN', # The voice to be used, can be MAN,WOMAN. Defaults to WOMAN.
-            'language' => 'en-GB' # The language to be used
+$auth_id = "Your AUTH_ID";
+$auth_token = "Your AUTH_TOKEN";
+
+$client = new RestClient("YOUR_AUTH_ID", "YOUR_AUTH_TOKEN");
+
+
+if ($digit == "1") {
+    try {
+        $response = $client->calls->startSpeaking(
+            'eba53b9e-8fbd-45c1-9444-696d2172fbc8', # call_uuid
+            'Hello World' # text to speak
         );
-
-        $resp = $p->speak($params);
-        print_r ($resp);
-    }else{
-        print ("WrongInput");
+        print_r($response);
+    } catch (PlivoRestException $ex) {
+        print_r($ex);
     }
+} else {
+    print("WrongInput");
+}
 
 /*
 Sample Output
 <Response>
-    <GetDigits action="http://morning-ocean-4669.herokuapp.com/speak_action/" method="GET" numDigits="1" redirect="false" retries="1" timeout="7">
-        <Speak>Press 1 to listen to a message</Speak>
-    </GetDigits>
-    <Wait length="10" />
+   <GetDigits action="http://morning-ocean-4669.herokuapp.com/speak_action/" method="GET" numDigits="1" redirect="false" retries="1" timeout="7">
+      <Speak>Press 1 to listen to a message</Speak>
+   </GetDigits>
+   <Wait length="10" />
 </Response>
 
 ( 

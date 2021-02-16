@@ -1,21 +1,21 @@
 <?php
-    require 'vendor/autoload.php';
-    use Plivo\RestAPI;
 
-    $auth_id = "Your AUTH_ID";
-    $auth_token = "Your AUTH_TOKEN";
+require 'vendor/autoload.php';
 
-    $p = new RestAPI($auth_id, $auth_token);
+use Plivo\RestClient;
+use Plivo\Exceptions\PlivoRestException;
 
-    $params = array(
-            'record_id' => '6e699c0a-af55-11e4-91ce-377ffe01233f' # Call UUID
-        );
-    $response = $p->get_cdr($params);
+$client = new RestClient("YOUR_AUTH_ID", "YOUR_AUTH_TOKEN");
 
-    // Print the response
-    print_r ($response);
-
-    /* 
+try {
+    $response = $client->calls->get(
+        'eba53b9e-8fbd-45c1-9444-696d2172fbc8' # Call UUID
+    );
+    print_r($response);
+} catch (PlivoRestException $ex) {
+    print_r($ex);
+} 
+/* 
     Sample Output
     ( 
         [status] => 200 

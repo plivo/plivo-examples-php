@@ -1,65 +1,66 @@
 <?php
-    require 'vendor/autoload.php';
-    use Plivo\Response;
- 
-    $r = new Response();
+require 'vendor/autoload.php';
 
-    $getdigits_action_url = "https://example.com/recording_action.php";
-    $params = array(
-        'action' => $getdigits_action_url, # The URL to which the digits are sent.
-        'method' => 'GET', # Submit to action URL using GET or POST.
-        'timeout' => '7', # Time in seconds to wait to receive the first digit.
-        'numDigits' =>  '1', # Maximum number of digits to be processed in the current operation. 
-        'retries' => '1', # Indicates the number of retries the user is allowed to input the digits
-        'redirect' => 'false' # Redirect to action URL if true. If false,only request the URL and continue to next element.
-    );
+use Plivo\Response;
 
-    $getDigits = $r->addGetDigits($params);
+$r = new Response();
 
-    $getDigits->addSpeak("Press 1 to record this call");
+$getdigits_action_url = "https://example.com/recording_action.php";
+$params = array(
+    'action' => $getdigits_action_url, # The URL to which the digits are sent.
+    'method' => 'GET', # Submit to action URL using GET or POST.
+    'timeout' => '7', # Time in seconds to wait to receive the first digit.
+    'numDigits' =>  '1', # Maximum number of digits to be processed in the current operation. 
+    'retries' => '1', # Indicates the number of retries the user is allowed to input the digits
+    'redirect' => 'false' # Redirect to action URL if true. If false,only request the URL and continue to next element.
+);
 
-    $waitparam = array(
-        'length' => '10'
-    );
- 
-    $r->addWait($waitparam);
+$getDigits = $r->addGetDigits($params);
 
-    Header('Content-type: text/xml');
-    echo($r->toXML());
+$getDigits->addSpeak("Press 1 to record this call");
+
+$waitparam = array(
+    'length' => '10'
+);
+
+$r->addWait($waitparam);
+
+Header('Content-type: text/xml');
+echo ($r->toXML());
 ?>
 
 <!--recording_action.php-->
 
 <?php
-    require 'vendor/autoload.php';
-    use Plivo\RestAPI;
 
-    $digit = $_REQUEST['Digits'];
-    $uuid = $_REQUEST['CallUUID'];
-    print("Digit : $digit");
-    print("Call UUID : $uuid");
+require 'vendor/autoload.php';
+use Plivo\RestClient;
+use Plivo\Exceptions\PlivoRestException;
 
-    $auth_id = "Your AUTH_ID";
-    $auth_token = "Your AUTH_TOKEN";
 
-    $p = new RestAPI($auth_id, $auth_token);  
+$digit = $_REQUEST['Digits'];
+$uuid = $_REQUEST['CallUUID'];
+print("Digit : $digit");
+print("Call UUID : $uuid");
 
-    if($digit == "1")
-    {
-        $params = array(
-            'call_uuid' => $uuid # ID of the call
+
+if ($digit == "1") {
+    $client = new RestClient("YOUR_AUTH_ID", "YOUR_AUTH_TOKEN");
+
+    try {
+        $response = $client->calls->startRecording(
+            $uuid # ID of the call
         );
-
-        $response = $p->record($params);
-        print("URL : {$response['response']['url']}");
-        print("Recording ID : {$response['response']['recording_id']}");
-        print("API ID : {$response['response']['api_id']}");
-        print("Message : {$response['response']['message']}");
+        print_r("URL : {$response->url}");
+        print_r("Recording ID : {$response->recordingId}");
+        print_r("API ID : {$response->apiId}");
+        print_r("Message : {$response->message}");
+    } catch (PlivoRestException $ex) {
+        print_r($ex);
     }
-    else
-    {
-        print("invalid");
-    }
+} else {
+    print("invalid");
+}
 
 /*
 Sample Output

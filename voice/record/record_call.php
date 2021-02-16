@@ -43,12 +43,10 @@
     print("Recording Duration : $record_duration");
     print("Recording ID : $record_id");
 
-
 /*
 Sample Output
 <Response>
-    <Record action="https://glacial-harbor-8656.herokuapp.com/testing.php/record_action" method="GET" 
-        callbackUrl="https://glacial-harbor-8656.herokuapp.com/testing.php/recording_callback" callbackMethod="GET"/>
+   <Record action="https://glacial-harbor-8656.herokuapp.com/testing.php/record_action" method="GET" callbackUrl="https://glacial-harbor-8656.herokuapp.com/testing.php/recording_callback" callbackMethod="GET" />
 </Response>
 
 Sample output for Action URL

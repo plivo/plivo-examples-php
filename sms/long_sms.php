@@ -40,20 +40,35 @@
 
 ?>
 
+<?php
+require 'vendor/autoload.php';
+use Plivo\RestClient;
+
+$client = new RestClient("auth_id", "auth_token");
+$response = $client->messages->create(
+ '+14152223333', // Sender's phone number with country code
+  ['+14152223333'], // receiver's phone number with country code
+  # Long text in English
+  'This randomly generated text can be used in your layout (webdesign , websites, books, posters ... ) for free. This text is entirely free of law. Feel free to link to this site by using the image below or by making a simple text link',
+  # Long text in Japanese
+//   "このランダムに生成されたテキストは、自由のためのあなたのレイアウト（ウェブデザイン、ウェブサイト、書籍、ポスター...）で使用することができます。このテキストは、法律の完全に無料です。下の画像を使用して、または単純なテキストリンクを作ることで、このサイトへのリンクフリーです"
+  # Long text in French        
+//   "Ce texte généré aléatoirement peut-être utilisé dans vos maquettes (webdesign, sites internet,livres, affiches...) gratuitement. Ce texte est entièrement libre de droit. N'hésitez pas à faire un lien sur ce site en utilisant l'image ci-dessous ou en faisant un simple lien texte"
+  ["url"=>"http://foo.com/sms_status/"],
+);
+print_r($response);
+?>
+
 <!--
 Sample Output
-( 
-    [api_id] => dd294730-a262-11e4-b153-22000abcaa64 
-    [message] => message(s) queued 
-    [message_uuid] => Array ( [0] => dd4ba604-a262-11e4-a6e4-22000afa12b0 ) 
+(
+    [messageUuid:protected] => Array
+        (
+            [0] => a3ade4da-7028-11eb-9c24-0242ac110004
+        )
+
+    [_message] => message(s) queued
+    [apiId] => a3a826a8-7028-11eb-9c24-0242ac110004
+    [statusCode] => 202
 )
-
-# Output for Japanese
-# Your SMS was split into 3 units
-
-# Output for English
-# Your SMS was split into 2 units
-
-# Output for French
-# Your SMS was split into 5 units
 -->

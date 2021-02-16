@@ -1,22 +1,23 @@
 <?php
-    require 'vendor/autoload.php';
-    use Plivo\Response;
+require 'vendor/autoload.php';
 
-    // Feth the from_number from the URL
-    $from_numbr = $_REQUEST['From'];
-    $r = new Response(); 
+use Plivo\XML\Response;
 
-    // Add Dial tag
-    $params = array(
-        'callerId' => $from_numbr # Caller ID
-    );
+// Feth the from_number from the URL
+$from_numbr = $_REQUEST['From'];
+$r = new Response();
 
-    $d = $r->addDial($params);
-    $number = "2222222222";
-    $d->addNumber($number);
+// Add Dial tag
+$params = array(
+    'callerId' => $from_numbr # Caller ID
+);
 
-    Header('Content-type: text/xml');
-    echo($r->toXML());
+$d = $r->addDial($params);
+$number = "2222222222";
+$d->addNumber($number);
+
+Header('Content-type: text/xml');
+echo ($r->toXML());
 
 /*
 Sample Output
