@@ -1,46 +1,43 @@
 <?php
-    require 'vendor/autoload.php';
-    use Plivo\Response;
+require 'vendor/autoload.php';
 
-    // Generate a Speak XML with the details of the text to play on the call.
-    $body = 'This is English!';
-    $params = array(  
-        'language' => "en-GB", 
-        'voice' => "MAN"
-    );
+use Plivo\XML\Response;
 
-    $r = new Response(); 
+// Generate a Speak XML with the details of the text to play on the call.
+$body = 'This is English!';
+$params = array(
+    'language' => "en-GB",
+    'voice' => "MAN"
+);
 
-    // Add speak element
-    $r->addSpeak($body,$params);
+$r = new Response();
 
-    $body1 = 'Ce texte généré aléatoirement peut-être utilisé dans vos maquettes';
-    $params1 = array(  
-        'language' => "fr-FR"
-    );
+// Add speak element
+$r->addSpeak($body, $params);
 
-    $r->addSpeak($body1,$params1);
+$body1 = 'Ce texte généré aléatoirement peut-être utilisé dans vos maquettes';
+$params1 = array(
+    'language' => "fr-FR"
+);
 
-    $body2 = 'Это случайно сгенерированный текст может быть использован в макете';
-    $params2 = array(  
-        'language' => "ru-RU",
-        'voice' => "MAN" 
-    );
+$r->addSpeak($body1, $params1);
 
-    $r->addSpeak($body2,$params2);
+$body2 = 'Это случайно сгенерированный текст может быть использован в макете';
+$params2 = array(
+    'language' => "ru-RU",
+    'voice' => "MAN"
+);
 
-    Header('Content-type: text/xml');
-    echo($r->toXML());
+$r->addSpeak($body2, $params2);
+
+Header('Content-type: text/xml');
+echo ($r->toXML());
 
 /*
 Sample Output
 <Response>
-    <Speak language="en-GB" voice="MAN">This is English!</Speak>
-    <Speak language="fr-FR">
-        Ce texte généré aléatoirement peut-être utilisé dans vos maquettes
-    </Speak>
-    <Speak language="ru-RU" voice="MAN">
-        Это случайно сгенерированный текст может быть использован в макете
-    </Speak>
+   <Speak language="en-GB" voice="MAN">This is English!</Speak>
+   <Speak language="fr-FR">Ce texte généré aléatoirement peut-être utilisé dans vos maquettes</Speak>
+   <Speak language="ru-RU" voice="MAN">Это случайно сгенерированный текст может быть использован в макете</Speak>
 </Response>
 */

@@ -1,60 +1,63 @@
 <?php
-    require 'vendor/autoload.php';
-    use Plivo\Response;
+require 'vendor/autoload.php';
 
-    # Set te caller ID using Dial XML
+use Plivo\Response;
 
-    $r = new Response();
+# Set te caller ID using Dial XML
 
-    // Generate a Dial XML ans set the caller ID
-    $params = array(
-            'callerId' => '1111111111' # Caller ID
-        );
+$r = new Response();
 
-    $d = $r->addDial($params);
-    $number = '2222222222';
-    $d->addNumber($number);
+// Generate a Dial XML ans set the caller ID
+$params = array(
+    'callerId' => '1111111111' # Caller ID
+);
 
-    Header('Content-type: text/xml');
-    echo($r->toXML());
+$d = $r->addDial($params);
+$number = '2222222222';
+$d->addNumber($number);
+
+Header('Content-type: text/xml');
+echo ($r->toXML());
 
 /*
 Sample successful output
 <Response>
-    <Dial callerId="1111111111">
-        <Number>2222222222</Number>
-    </Dial>
+   <Dial callerId="1111111111">
+      <Number>2222222222</Number>
+   </Dial>
 </Response>
 */
 ?>
 
 <?php
-    require 'vendor/autoload.php';
-    use Plivo\RestAPI;
-    # Set the caller ID using Call API
 
-    $auth_id = "Your AUTH_ID";
-    $auth_token = "Your AUTH_TOKEN";
+require 'vendor/autoload.php';
 
-    $p = new RestAPI($auth_id, $auth_token);
+use Plivo\RestClient;
+use Plivo\Exceptions\PlivoRestException;
 
-    $params = array(
-        'to' => '14155069431', # The phone numer to which the all has to be placed
-        'from' => '18583650866', # The phone number to be used as the caller id
-        'answer_url' => "https://example.com/detect", # The URL invoked by Plivo when the outbound call is answered
-        'answer_method' => "GET", # The method used to call the answer_url
+$client = new RestClient("YOUR_AUTH_ID", "YOUR_AUTH_TOKEN");
+try {
+    $response = $client->calls->create(
+        '+14151234567', # The phone number to be used as the caller id
+        ['+15671234567'], # The phone numer to which the all has to be placed
+        'http://s3.amazonaws.com/static.plivo.com/answer.xml', # The URL invoked by Plivo when the outbound call is answered
+        'GET', # The method used to call the answer_url
+        [
+            'ring_url' => 'http://WWW.RING.URL',
+        ]
     );
-
-    $response = $p->make_call($params);
-    print_r ($response);
+    print_r($response);
+} catch (PlivoRestException $ex) {
+    print_r($ex);
+}
 
 /* Sample Output
-( 
-    [status] => 201 
-    [response] => Array ( 
-        [api_id] => 32cba792-ae01-11e4-b153-22000abcaa64 
-        [message] => call fired 
-        [request_uuid] => 5b2db3d3-f478-4b63-992c-e47c527572e8 
+(
+    [requestUuid:protected] => 2d7fb6f1-76ec-42f8-a935-bde99c5fc3b0
+    [_message] => call fired
+    [apiId] => 75fb7714-7046-11eb-9c7a-0242ac110006
+    [statusCode] => 201
 )
-*/ 
+*/
 ?>       

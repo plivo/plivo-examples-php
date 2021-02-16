@@ -1,23 +1,25 @@
 <?php
-    require 'vendor/autoload.php';
-    use Plivo\RestAPI;
-    
-    $auth_id = "Your AUTH_ID";
-    $auth_token = "Your AUTH_TOKEN";
-    
-    $p = new RestAPI($auth_id, $auth_token);
+require 'vendor/autoload.php';
 
-    # Get all numbers
-    $params = array(
-            'limit' => '10', # Used to display the number of results per page.
-            'offset' => '0' # Denotes the number of value items by which the results should be offset. 
-        );
-    
-    #$response = $p->get_numbers($params);
-    #print_r ($response);
+use Plivo\RestClient;
+use Plivo\Exceptions\PlivoRestException;
 
-    /*
-    Sample Output
+$client = new RestClient("YOUR_AUTH_ID", "YOUR_AUTH_TOKEN");
+
+try {
+    $response = $client->numbers->list(
+        [
+            'limit' => 4, # Used to display the number of results per page.
+            'offset' => 0 # Denotes the number of value items by which the results should be offset. 
+        ]
+    );
+    print_r($response);
+} catch (PlivoRestException $ex) {
+    print_r($ex);
+}
+
+/*
+Sample Output
     (
         [status] => 200
         [response] => Array
@@ -78,16 +80,21 @@
     )
     */
 
-    # Get a particular number
-    $params = array(
-            'number' => '1111111111' # PHone number for which the details have to be retrieved
-        );
+# Get a particular number
+try {
+    $response = $client->numbers->get(
+        '17609915566' # PHone number for which the details have to be retrieved
+    );
+    print_r($response);
+} catch (PlivoRestException $ex) {
+    print_r($ex);
+}
 
-    $response = $p->get_number($params);
-    print_r ($response);
 
-    /*
-    Sample Output
+$response = $p->get_number($params);
+print_r($response);
+/*
+Sample Output
     (
         [status] => 200
         [response] => Array
@@ -99,10 +106,10 @@
             [application] => 
             [carrier] => Plivo
             [monthly_rental_rate] => 0.80000
-            [number] => 1111111111
+            [number] => 17609915566
             [number_type] => local
             [region] => UNITED KINGDOM
-            [resource_uri] => /v1/Account/XXXXXXXXXXXX/Number/1111111111/
+            [resource_uri] => /v1/Account/XXXXXXXXXXXX/Number/17609915566/
             [sms_enabled] => 1
             [sms_rate] => 0.00000
             [sub_account] => 

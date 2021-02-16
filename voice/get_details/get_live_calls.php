@@ -1,20 +1,31 @@
 <?php
-    require 'vendor/autoload.php';
-    use Plivo\RestAPI;
-    
-    $auth_id = "Your AUTH_ID";
-    $auth_token = "Your AUTH_TOKEN";
 
-    $p = new RestAPI($auth_id, $auth_token);
+/**
+ * Example for Call get
+ */
 
-    $params =array(
-        'call_uuid' => 'fcef9018-aec6-11e4-8449-c73b3246dc2a' # The status of the call
+require 'vendor/autoload.php';
+use Plivo\RestClient;
+use Plivo\Exceptions\PlivoRestException;
+$client = new RestClient("YOUR_AUTH_ID", "YOUR_AUTH_TOKEN");
+try {
+    $response = $client->calls->getLive(
+        'eba53b9e-8fbd-45c1-9444-696d2172fbc8' # UUID of call to fetch live status
     );
+    print_r($response);
+}
+catch (PlivoRestException $ex) {
+    print_r($ex);
+}
 
-    // Get all Live Calls
-    $response = $p->get_live_call($params);
-
-    print_r ($response);    
+// Get all Live Calls
+try {
+    $response = $client->calls->listLive();
+    print_r($response);
+}
+catch (PlivoRestException $ex) {
+    print_r($ex);
+}
 
     /*
     Sample Output
@@ -28,17 +39,4 @@
             [api_id] => 44abd2a4-aec7-11e4-ac1f-22000ac51de6  
         ) 
     )
-    */
-    
-    $uuids = $response['response']['calls'];
-    
-    // Looping through the call uuids
-    foreach($uuids as $value){
-        print_r ("Calls : {$value} <br>");
-    }
-
-    /* 
-    Sample Output
-    Calls : a60f44dc-926f-11e4-82f5-b559cbfe39b9
-    Calls : af399206-926f-11e4-8b6f-fd067af138be
     */

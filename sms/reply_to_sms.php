@@ -1,41 +1,35 @@
 <?php
     require 'vendor/autoload.php';
-    use Plivo\Response;
-    
+    use Plivo\XML\Response;
     // Sender's phone numer
     $from_number = $_REQUEST["From"];
-
     // Receiver's phone number - Plivo number
     $to_number = $_REQUEST["To"];
-
     // The SMS text message which was received
     $text = $_REQUEST["Text"];
+    // Prints the message
+    echo("Message received - From $from_number, To: $to_number, Text: $text");
 
-    // Output the text which was received, you could
-    // also store the text in a database.
-    // echo("Message received from $from_number : $text");
-
+    // send the details to generate an XML
+    $response = new Response();
     $params = array(
-            'src' => $to_number, 
-            'dst' => $from_number,
-        );
-
-    $body = "Thank you for your message.";
-
-    // Generate a Message XML with the details of
-    // the reply to be sent.
-    $r = new Response();
-    $r->addMessage($body, $params);
+        'src' => $to_number, //Sender's phone number
+        'dst' => $from_number, //Receiver's phone Number
+        'type' => "sms",
+        'callbackUrl' => "https://www.foo.com/sms_status/",
+        'callbackMethod' => "POST"
+    );
+    $message_body = "Thank you, we have received your request"; //The text to be sent
+    $response->addMessage($message_body, $params);
 
     Header('Content-type: text/xml');
-    echo($r->toXML());
-
+    echo($response->toXML()); // Returns the XML
 ?>
 
 <!--
 Sample Output
-Message received from 3333333333 : Hello, from Plivo
+Message received - From: 3333333333, To: 1111111111,  Text: Hello, from Plivo
 <Response>
-   <Message dst="2222222222" src="1111111111">Thank you for your message</Message>
+   <Message dst="3333333333" src="1111111111">Thank you for your message</Message>
 </Response>
 -->

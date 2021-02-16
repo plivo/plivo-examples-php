@@ -1,20 +1,21 @@
 <?php
-    require 'vendor/autoload.php';
-    use Plivo\Response;
-        
-    // Generate a Speak XML with the details of the text to play on the call.
-    $body = 'Hi, Calling from Plivo';
-    $attributes = array (
+require 'vendor/autoload.php';
+
+use Plivo\XML\Response;
+
+// Generate a Speak XML with the details of the text to play on the call.
+$body = 'Hi, Calling from Plivo';
+$attributes = array(
     'loop' => 2
-    );
+);
 
-    $r = new Response(); 
+$r = new Response();
 
-    // Add speak element
-    $r->addSpeak($body,$attributes);
+// Add speak element
+$r->addSpeak($body, $attributes);
 
-    Header('Content-type: text/xml');
-    echo($r->toXML());
+Header('Content-type: text/xml');
+echo ($r->toXML());
 
 /*
 Sample Output

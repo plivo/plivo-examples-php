@@ -1,18 +1,21 @@
 <?php
-    require 'vendor/autoload.php';
-    use Plivo\RestAPI;
-    
-    $auth_id = "Your AUTH_ID";
-    $auth_token = "Your AUTH_TOKEN";
-    
-    $p = new RestAPI($auth_id, $auth_token);
+/**
+ * Example for Pricing get
+ */
+require 'vendor/autoload.php';
+use Plivo\RestClient;
+use Plivo\Exceptions\PlivoRestException;
+$client = new RestClient("YOUR_AUTH_ID", "YOUR_AUTH_TOKEN");
 
-    $params = array(
-        'country_iso' => 'GB' # The 2 digit country ISO code.
+try {
+    $response = $client->pricing->get(
+        'GB'
     );
-
-    $response = $p->pricing($params);
-    print_r ($response);
+    print_r($response);
+}
+catch (PlivoRestException $ex) {
+    print_r($ex);
+}
 
     /*
     Sample Output

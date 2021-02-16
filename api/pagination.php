@@ -1,22 +1,25 @@
 <?php
-    require 'vendor/autoload.php';
-    use Plivo\RestAPI;
-    
-    $auth_id = "Your AUTH_ID";
-    $auth_token = "Your AUTH_TOKEN";
-    
-    $p = new RestAPI($auth_id, $auth_token);
-    
-    // Get Details of all existing Applications
-    $params = array(
-        'limit' => '2', # The number of results per page
-        'offset' =>'0' # The number of value items by which the results should be offset
-        );
 
-    $response = $p->get_applications($params);
-    // print_r ($response['response']);
+require 'vendor/autoload.php';
 
-    /*
+use Plivo\RestClient;
+use Plivo\Exceptions\PlivoRestException;
+
+$client = new RestClient("YOUR_AUTH_ID", "YOUR_AUTH_TOKEN");
+
+try {
+    $response = $client->applications->list(
+        [
+            'limit' => 0, # The number of results per page
+            'offset' => 3 # The number of value items by which the results should be offset
+        ]
+    );
+    print_r($response);
+} catch (PlivoRestException $ex) {
+    print_r($ex);
+}
+
+/*
     Sample Output
     ( 
         [api_id] => cff47926-ac45-11e4-b153-22000abcaa64 
@@ -66,17 +69,4 @@
             )
         }
     )
-    */
-
-    // Print the link to view the next page of results
-    echo "<br> Link to the next page : {$response['response']['meta']['next']}";
-
-    /*
-    Sample Output
-    /v1/Account/XXXXXXXXXXXX/Application/?limit=2&offset=0
-    
-    Browse https://api.plivo.com/v1/Account/XXXXXXXXXXXX/Application/?limit=2&offset=2
-    to view the next page of results. To traverse pages, browse the 'next' and 'previous' urls
-    */
-
-
+*/

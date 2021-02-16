@@ -1,27 +1,10 @@
 <?php
-    require 'vendor/autoload.php';
-    use Plivo\RestAPI;
-    $auth_id = "Your AUTH_ID";
-    $auth_token = "Your AUTH_TOKEN";
+require 'vendor/autoload.php';
+use Plivo\RestClient;
 
-    $p = new RestAPI($auth_id, $auth_token);
-    
-    $params = array(
-            'record_id' => '0936ec98-7c4c-11e4-9bd8-22000afa12b9', // The Message UUID
-        );
-
-    // Fetch the details
-    $response = $p->get_message($params);
-
-    // Print the response
-    print_r ($response['response']);
-    
-    // Print the number of SMS units
-    print "Units : {$response['response']['units']}";
-    
-    // Print the status of the message
-    print "Message State : {$response['response']['message_state']}";
-
+$client = new RestClient("auth_id", "auth_token");
+$response = $client->messages->get('0936ec98-7c4c-11e4-9bd8-22000afa12b9'); # MessageUuid
+print_r($response);
 ?>
 
 <!--
@@ -40,6 +23,4 @@ Sample Output
     [total_rate] => 0.00650 
     [units] => 4
 )
-Units : 4
-Message State : delivered 
 -->

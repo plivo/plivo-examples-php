@@ -1,34 +1,36 @@
 <?php
-    require 'vendor/autoload.php';
-    use Plivo\RestAPI;
-    
-    $auth_id = "Your AUTH_ID";
-    $auth_token = "Your AUTH_TOKEN";
 
-    $p = new RestAPI($auth_id, $auth_token);
+require 'vendor/autoload.php';
 
-    $params = array(
-        'to' => '2222222222<3333333333', # The phone numer to which the all has to be placed
-        'from' => '1111111111', # The phone number to be used as the caller id
-        'answer_url' => "https://s3.amazonaws.com/static.plivo.com/answer.xml", # The URL invoked by Plivo when the outbound call is answered
-        'answer_method' => "GET", # The method used to call the answer_url
+use Plivo\RestClient;
+use Plivo\Exceptions\PlivoRestException;
+
+$client = new RestClient("YOUR_AUTH_ID", "YOUR_AUTH_TOKEN");
+try {
+    $response = $client->calls->create(
+        '+14151234567', # The phone number to be used as the caller id
+        ['+15671234567<15671234891'], # The phone numer to which the all has to be placed
+        'http://s3.amazonaws.com/static.plivo.com/answer.xml', # The URL invoked by Plivo when the outbound call is answered
+        'GET', # The method used to call the answer_url
+        [
+            'ring_url' => 'http://WWW.RING.URL',
+        ]
     );
-    
-    $response = $p->make_call($params);
+    print_r($response);
+} catch (PlivoRestException $ex) {
+    print_r($ex);
+}
 
-    print_r ($response);
+/* Sample Output
+(
+    [requestUuid:protected] => Array
+        (
+            [0] => 352da142-80e0-415f-8a7a-449541ea5662
+            [1] => 0202521a-e713-4178-9601-e18ba99bdd65
+        )
 
-    /* Sample Output
-    ( 
-        [status] => 201 
-        [response] => Array ( 
-            [api_id] => ed5108f0-ae01-11e4-a2d1-22000ac5040c 
-            [message] => calls fired 
-            [request_uuid] => Array ( 
-                [0] => 23cb5e06-9f5d-44c7-b880-1bd32c970d52 
-                [1] => ebb63b3e-69d2-450a-91ee-f0cb3b28a3dc 
-            )
-        ) 
-    )
-    */
-
+    [_message] => calls fired
+    [apiId] => 278f9c47-7046-11eb-98e1-0242ac110007
+    [statusCode] => 201
+)
+*/

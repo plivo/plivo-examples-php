@@ -1,25 +1,22 @@
 <?php
-    require 'vendor/autoload.php';
-    use Plivo\RestAPI;
-    
-    $auth_id = "Your AUTH_ID";
-    $auth_token = "Your AUTH_TOKEN";
-    
-    $p = new RestAPI($auth_id, $auth_token);
+require 'vendor/autoload.php';
 
-    # Search for new number
-    $params = array(
-            'country_iso' => 'US', # The ISO code A2 of the country
-            'type' => 'local', # The type of number you are looking for. The possible number types are local, national and tollfree.
-            'pattern' => '210', # Represents the pattern of the number to be searched. 
-            'region' => 'Texas' # This filter is only applicable when the number_type is local. Region based filtering can be performed.
-        );
+use Plivo\RestClient;
+use Plivo\Exceptions\PlivoRestException;
 
-    $response = $p->search_phone_numbers($params);
-    print_r ($response);
+$client = new RestClient("YOUR_AUTH_ID", "YOUR_AUTH_TOKEN");
 
-    /*
-    Sample Output
+# Search for new number
+try {
+    $response = $client->phonenumbers->list(
+        'US' # The ISO code A2 of the country
+    );
+    print_r($response);
+} catch (PlivoRestException $ex) {
+    print_r($ex);
+}
+/*
+Sample Output
     (
         [status] => 200
         [response] => Array
@@ -80,47 +77,47 @@
     )    
     */
 
-    # Buy a phone number
-    $params = array(
-        'number' => '12109206499' # The phone number
+# Buy a phone number
+try {
+    $response = $client->phonenumbers->buy(
+        '10123456789' # The phone number
     );
+    print_r($response);
+}
+catch (PlivoRestException $ex) {
+    print_r($ex);
+}
 
-    $response = $p->buy_phone_number($params);
-    print_r ($response);
-
-    /*
+/*
     Sample Output
-    (
-        [status] => 201
-        [response] => Array
-        (
-            [api_id] => 405f14e8-b68a-11e4-b932-22000ac50fac
-            [message] => created
-            [numbers] => Array
-            (
-                [0] => Array
-                (
-                    [number] => 12109206499
-                    [status] => Success
-                )
-            )
-            [status] => fulfilled
-        )
-    )
-    */
+(
+    [number:protected] => 18336312168
+    [numberStatus:protected] => Success
+    [status:protected] => fulfilled
+    [_message] => created
+    [apiId] => c2444610-7027-11eb-9dde-0242ac110004
+    [statusCode] => 201
+)
+*/
 
-    # Unrent a number
-    $params = array(
-            'number' => '12109206499' # Number that has to be unrented
+# Unrent a number
+try {
+    $response = $client->numbers->delete(
+        '17609915566' # Number that has to be unrented
     );
+    print_r($response);
+}
+catch (PlivoRestException $ex) {
+    print_r($ex);
+}
+/*
+Sample Output
+( 
+    [response] =>
+)
 
-    $response = $p->unrent_number($params);
-    print_r ($response);
-
-    /*
-    Sample Output
-    (
-        [status] => 204
-        [response] => 
-    )
-    */
+Unsuccessful Output
+(
+    [message:protected] => 404
+)
+*/
